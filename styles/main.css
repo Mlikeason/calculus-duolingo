@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    background: theme('colors.bg');
+    color: theme('colors.ink');
+  }
+  body {
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.7;
+    letter-spacing: -0.005em;
+  }
+  ::selection { background: theme('colors.accent-soft'); color: theme('colors.accent-deep'); }
+}
+
+@layer components {
+  .card {
+    @apply bg-paper border border-line rounded-xl;
+    box-shadow: theme('boxShadow.card');
+  }
+  .btn {
+    @apply px-4 py-2 rounded-lg border border-line bg-paper text-ink transition;
+    font-weight: 500;
+  }
+  .btn:hover {
+    @apply border-accent text-accent;
+  }
+  .btn-primary {
+    @apply px-5 py-2.5 rounded-lg bg-accent text-white border border-accent transition;
+    font-weight: 500;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.1) inset, 0 1px 2px rgba(15,22,38,0.08);
+  }
+  .btn-primary:hover {
+    @apply bg-accent-deep;
+  }
+  .btn-primary:disabled {
+    @apply bg-line text-muted border-line cursor-not-allowed;
+    box-shadow: none;
+  }
+}
+
+.katex { font-size: 1.05em; }
+.katex-display { margin: 1em 0; }
+
+/* Tree nodes */
+.node-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 1.5px solid theme('colors.line');
+  background: theme('colors.paper');
+  flex-shrink: 0;
+  transition: all 200ms ease;
+  position: relative;
+}
+.node-dot.done {
+  background: theme('colors.accent');
+  border-color: theme('colors.accent');
+  box-shadow: 0 0 0 3px theme('colors.accent-soft');
+}
+.node-dot.available {
+  border-color: theme('colors.accent');
+  background: theme('colors.paper');
+  box-shadow: 0 0 0 3px theme('colors.accent-soft');
+}
+.node-dot.locked {
+  background: theme('colors.line');
+  border-color: theme('colors.line');
+}
+
+.node-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 140ms ease, transform 140ms ease;
+}
+.node-row.locked {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.node-row:not(.locked):hover {
+  background: theme('colors.accent-soft');
+}
+.node-row:not(.locked):active {
+  transform: scale(0.99);
+}
+.node-connector {
+  width: 1.5px;
+  height: 12px;
+  background: theme('colors.line');
+  margin-left: 20px;
+}
+
+/* Exercise feedback */
+.ex-option {
+  @apply border border-line bg-paper rounded-lg px-4 py-3 cursor-pointer transition text-left;
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+}
+.ex-option:hover:not(:disabled) {
+  @apply border-accent;
+  background: theme('colors.accent-soft');
+}
+.ex-option.correct {
+  @apply border-good;
+  background: theme('colors.good-soft');
+}
+.ex-option.wrong {
+  @apply border-bad;
+  background: theme('colors.bad-soft');
+}
+.ex-option:disabled { cursor: default; }
+
+.fill-input {
+  @apply border border-line bg-paper rounded-lg px-3 py-2;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  min-width: 8em;
+  transition: all 140ms ease;
+}
+.fill-input:focus {
+  @apply border-accent outline-none;
+  box-shadow: 0 0 0 3px theme('colors.accent-soft');
+}
+.fill-input.correct { @apply border-good bg-good-soft; }
+.fill-input.wrong   { @apply border-bad bg-bad-soft; }
+
+.feedback-good {
+  @apply bg-good-soft border-l-2 border-good rounded-md px-3 py-2 text-sm;
+  color: #114a2c;
+}
+.feedback-bad {
+  @apply bg-bad-soft border-l-2 border-bad rounded-md px-3 py-2 text-sm;
+  color: #6b1f17;
+}
+.callout {
+  @apply bg-accent-soft border-l-2 border-accent rounded-md px-4 py-3 my-3;
+}
+
+/* Module section card */
+.module-section {
+  background: theme('colors.paper');
+  border: 1px solid theme('colors.line');
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: theme('boxShadow.card');
+}
+
+/* Progress bar */
+.progress-track {
+  background: theme('colors.line');
+  border-radius: 999px;
+  overflow: hidden;
+  height: 4px;
+}
+.progress-fill {
+  height: 100%;
+  background: theme('colors.accent');
+  transition: width 300ms ease;
+}
+
+/* Subtle slide-in for lesson content */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide-in { animation: slideIn 220ms ease both; }
