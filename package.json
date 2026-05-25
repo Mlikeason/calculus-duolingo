@@ -11,6 +11,7 @@
   "engines": {
     "node": "20.x"
   },
+  "packageManager": "pnpm@11.3.0",
   "dependencies": {
     "katex": "^0.16.11"
   },
