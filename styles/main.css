@@ -152,6 +152,11 @@
   box-shadow: theme('boxShadow.card');
 }
 
+.module-section.module-active {
+  border-color: theme('colors.accent');
+  background: theme('colors.accent-soft');
+}
+
 .module-header {
   cursor: pointer;
   user-select: none;

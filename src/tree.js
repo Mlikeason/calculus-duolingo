@@ -51,17 +51,18 @@ export function renderTree(host) {
   }
 
   curriculum.forEach((module) => {
-    const mod = document.createElement('section');
-    mod.className = 'module-section mb-6';
     const moduleUnits = module.lessons.flatMap((l) => l.units);
     const moduleDone = moduleUnits.filter((u) => isDone(u.id)).length;
     const isActive = module.id === activeModuleId;
+
+    const mod = document.createElement('section');
+    mod.className = `module-section mb-6${isActive ? ' module-active' : ''}`;
 
     const hdr = document.createElement('header');
     hdr.className = 'module-header flex items-center justify-between';
     hdr.innerHTML = `
       <div class="flex items-center gap-3 min-w-0">
-        <span class="module-chevron ${isActive ? 'open' : ''}">›</span>
+        <span class="module-chevron">›</span>
         <div class="min-w-0">
           <h2 class="font-serif text-xl text-ink">${module.title}</h2>
           ${module.subtitle ? `<p class="text-xs text-muted mt-0.5">${module.subtitle}</p>` : ''}
@@ -73,7 +74,7 @@ export function renderTree(host) {
 
     const body = document.createElement('div');
     body.className = 'module-body mt-5';
-    if (!isActive) body.style.display = 'none';
+    body.style.display = 'none';
     mod.appendChild(body);
 
     hdr.addEventListener('click', () => {
