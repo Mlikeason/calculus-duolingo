@@ -1,6 +1,6 @@
 // Three small panels side-by-side: removable, jump, infinite discontinuity.
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', dashed:'#aab3c2' };
+import { C } from './colors.js';
 
 export function renderDiscontinuityTypes(host) {
   host.innerHTML = '';

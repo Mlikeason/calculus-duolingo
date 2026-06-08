@@ -1,7 +1,7 @@
 // Animate the secant line from (a, f(a)) to (a+h, f(a+h)) and watch it converge
 // to the tangent as h → 0. Slider controls h.
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', good:'#1f6b40', secant:'#9b2d20' };
+import { C } from './colors.js';
 
 export function renderSecantTangent(host, viz) {
   const f = makeF(viz.f);
@@ -50,17 +50,17 @@ export function renderSecantTangent(host, viz) {
     // Secant slope
     const m = (fah - fa) / h;
     const sF = (x) => fa + m * (x - a);
-    drawCurve(svg, xMin, xMax, sF, sx, sy, yMin, yMax, C.secant, 1.8);
+    drawCurve(svg, xMin, xMax, sF, sx, sy, yMin, yMax, C.bad, 1.8);
 
     // Points
     dot(svg, sx(a), sy(fa), C.accent);
-    dot(svg, sx(a + h), sy(fah), C.secant);
+    dot(svg, sx(a + h), sy(fah), C.bad);
 
     // Labels: m_sec value, m_tan value
-    svg.appendChild(txt(W - pad - 6, pad + 14, `割线斜率 ${m.toFixed(3)}`, 11, C.secant, 'end'));
+    svg.appendChild(txt(W - pad - 6, pad + 14, `割线斜率 ${m.toFixed(3)}`, 11, C.bad, 'end'));
     svg.appendChild(txt(W - pad - 6, pad + 30, `切线斜率 ${fPrimeA.toFixed(3)}`, 11, C.good, 'end'));
     svg.appendChild(txt(sx(a), sy(fa) + 16, `a`, 11, C.accent));
-    svg.appendChild(txt(sx(a + h), sy(fah) - 8, `a+h`, 11, C.secant));
+    svg.appendChild(txt(sx(a + h), sy(fah) - 8, `a+h`, 11, C.bad));
   }
 
   const controls = document.createElement('div');

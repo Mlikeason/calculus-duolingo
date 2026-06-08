@@ -1,6 +1,6 @@
 // Side-by-side: y = a^x and y = log_a(x), mirror across y = x.
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', good:'#1f6b40', dashed:'#aab3c2' };
+import { C } from './colors.js';
 
 export function renderExpLog(host, viz) {
   const base = viz.base ?? Math.E;

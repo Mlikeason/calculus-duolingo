@@ -52,6 +52,7 @@ export function renderFill(wrap, ex, onAnswered) {
     answered = true;
     const correct = matches(input.value, ex.answer);
     input.classList.add(correct ? 'correct' : 'wrong');
+    input.classList.add(correct ? 'pop' : 'shake');
     input.disabled = true;
     submit.disabled = true;
     const fb = document.createElement('div');

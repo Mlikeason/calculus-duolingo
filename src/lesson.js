@@ -1,5 +1,5 @@
 import { findUnit, allUnitsInOrder } from '../data/index.js';
-import { markDone } from './state.js';
+import { markDone, unitStatus } from './state.js';
 import { go } from './router.js';
 import { renderMath } from './katex-helper.js';
 import { renderExercise } from './exercises/index.js';
@@ -15,8 +15,12 @@ export function renderLesson(host, unitId, preview = false) {
     return;
   }
 
-  // Build slides: intro only for preview, full lesson otherwise
-  const slides = [];
+  const order = allUnitsInOrder();
+  const curIndex = order.indexOf(unit.id);
+  const nextUnitId = order[curIndex + 1];
+  const status = unitStatus(order, unit.id);
+
+  let slides = [];
   if (unit.intro) slides.push({ kind: 'intro', data: unit.intro });
   if (!preview) {
     (unit.exercises || []).forEach((ex, i) => slides.push({ kind: 'exercise', data: ex, index: i }));
@@ -25,6 +29,7 @@ export function renderLesson(host, unitId, preview = false) {
 
   let idx = 0;
   let correctCount = 0;
+  let wrongIndices = [];
 
   host.innerHTML = '';
   const page = document.createElement('div');
@@ -138,7 +143,17 @@ export function renderLesson(host, unitId, preview = false) {
       slideHost.appendChild(wrap);
       renderMath(wrap);
       setCanAdvance(true);
-      nextBtn.textContent = preview ? '← 返回目录' : '开始练习 →';
+
+      if (preview) {
+        if (status !== 'locked') {
+          nextBtn.textContent = '开始学习 →';
+          nextBtn.className = 'btn-primary';
+        } else {
+          nextBtn.textContent = '← 返回目录';
+        }
+      } else {
+        nextBtn.textContent = '开始练习 →';
+      }
     } else if (s.kind === 'exercise') {
       const card = document.createElement('div');
       card.className = 'card p-5 space-y-3 slide-in';
@@ -150,6 +165,7 @@ export function renderLesson(host, unitId, preview = false) {
 
       const exHost = renderExercise(s.data, (correct) => {
         if (correct) correctCount++;
+        else wrongIndices.push(s.index);
         setCanAdvance(true);
       });
       card.appendChild(exHost);
@@ -158,35 +174,52 @@ export function renderLesson(host, unitId, preview = false) {
     } else if (s.kind === 'done') {
       markDone(unit.id);
       const exCount = (unit.exercises || []).length;
+      const hasWrong = wrongIndices.length > 0;
       const wrap = document.createElement('div');
       wrap.className = 'text-center py-16 space-y-4 slide-in';
       wrap.innerHTML = `
         <div class="font-serif text-3xl">完成</div>
         <p class="text-muted">${unit.title} · 答对 ${correctCount} / ${exCount}</p>
-        <div class="flex gap-3 justify-center pt-4">
+        <div class="flex gap-3 justify-center flex-wrap pt-4">
+          <button class="btn" data-action="home">返回目录</button>
+          ${hasWrong ? '<button class="btn" data-action="redo-wrong">重做错题</button>' : ''}
           <button class="btn" data-action="redo">再做一遍</button>
-          <button class="btn-primary" data-action="continue">下一节 →</button>
+          <button class="btn-primary" data-action="continue">${nextUnitId ? '下一节 →' : '返回目录'}</button>
         </div>
       `;
       slideHost.appendChild(wrap);
+      wrap.querySelector('[data-action="home"]').addEventListener('click', () => go('/'));
       wrap.querySelector('[data-action="redo"]').addEventListener('click', () => {
-        idx = 0; correctCount = 0; renderSlide();
+        slides = [];
+        if (unit.intro) slides.push({ kind: 'intro', data: unit.intro });
+        (unit.exercises || []).forEach((ex, i) => slides.push({ kind: 'exercise', data: ex, index: i }));
+        slides.push({ kind: 'done' });
+        idx = 0; correctCount = 0; wrongIndices = [];
+        renderSlide();
       });
+      if (hasWrong) {
+        wrap.querySelector('[data-action="redo-wrong"]').addEventListener('click', () => {
+          const wrongExs = wrongIndices.map((i) => ({ kind: 'exercise', data: unit.exercises[i], index: i }));
+          slides = [...wrongExs, { kind: 'done' }];
+          idx = 0; correctCount = 0; wrongIndices = [];
+          renderSlide();
+        });
+      }
       wrap.querySelector('[data-action="continue"]').addEventListener('click', () => {
-        const order = allUnitsInOrder();
-        const cur = order.indexOf(unit.id);
-        const next = order[cur + 1];
-        if (next) go('/lesson/' + next);
+        if (nextUnitId) go('/lesson/' + nextUnitId);
         else go('/');
       });
-      // Hide bottom bar
       bottom.style.display = 'none';
     }
   }
 
   nextBtn.addEventListener('click', () => {
     if (!canAdvance) return;
-    if (preview) { go('/'); return; }
+    if (preview) {
+      if (status !== 'locked') go('/lesson/' + unitId);
+      else go('/');
+      return;
+    }
     if (idx < slides.length - 1) {
       idx++;
       renderSlide();

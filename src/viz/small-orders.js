@@ -1,6 +1,6 @@
 // Show x, x², x³ near 0 to compare orders of infinitesimals.
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', good:'#1f6b40', bad:'#9b2d20' };
+import { C } from './colors.js';
 
 export function renderSmallOrders(host) {
   host.innerHTML = '';

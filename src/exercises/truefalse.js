@@ -34,8 +34,8 @@ export function renderTrueFalse(wrap, ex, onAnswered) {
       Array.from(list.children).forEach((b) => {
         b.disabled = true;
         const v = b.textContent === '对';
-        if (v === ex.answer) b.classList.add('correct');
-        else if (b === btn && !correct) b.classList.add('wrong');
+        if (v === ex.answer) { b.classList.add('correct'); b.classList.add('pop'); }
+        else if (b === btn && !correct) { b.classList.add('wrong'); b.classList.add('shake'); }
       });
       const fb = document.createElement('div');
       fb.className = correct ? 'feedback-good' : 'feedback-bad';

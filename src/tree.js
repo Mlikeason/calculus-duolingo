@@ -22,15 +22,16 @@ export function renderTree(host) {
   // Overall progress
   const total = order.length;
   const done = order.filter(isDone).length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
   const progress = document.createElement('div');
   progress.className = 'mb-10';
   progress.innerHTML = `
     <div class="flex items-baseline justify-between text-xs">
-      <span class="text-muted">进度 · ${done} / ${total}</span>
+      <span class="text-muted">进度 · ${done} / ${total}（${pct}%）</span>
       <button class="text-muted hover:text-accent transition" data-action="reset">重置</button>
     </div>
     <div class="progress-track mt-2">
-      <div class="progress-fill" style="width: ${total ? (done / total) * 100 : 0}%"></div>
+      <div class="progress-fill" style="width: ${pct}%"></div>
     </div>
   `;
   page.appendChild(progress);
@@ -53,10 +54,15 @@ export function renderTree(host) {
   curriculum.forEach((module) => {
     const moduleUnits = module.lessons.flatMap((l) => l.units);
     const moduleDone = moduleUnits.filter((u) => isDone(u.id)).length;
+    const moduleTotal = moduleUnits.length;
     const isActive = module.id === activeModuleId;
+    const allDone = moduleDone === moduleTotal && moduleTotal > 0;
 
     const mod = document.createElement('section');
-    mod.className = `module-section mb-6${isActive ? ' module-active' : ''}`;
+    let cls = 'module-section mb-6';
+    if (isActive) cls += ' module-active';
+    else if (allDone) cls += ' module-done';
+    mod.className = cls;
 
     const hdr = document.createElement('header');
     hdr.className = 'module-header flex items-center justify-between';
@@ -64,13 +70,19 @@ export function renderTree(host) {
       <div class="flex items-center gap-3 min-w-0">
         <span class="module-chevron">›</span>
         <div class="min-w-0">
-          <h2 class="font-serif text-xl text-ink">${module.title}</h2>
+          <h2 class="font-serif text-xl text-ink">${allDone ? '✓ ' : ''}${module.title}</h2>
           ${module.subtitle ? `<p class="text-xs text-muted mt-0.5">${module.subtitle}</p>` : ''}
         </div>
       </div>
-      <span class="text-xs text-muted font-mono flex-shrink-0">${moduleDone}/${moduleUnits.length}</span>
+      <span class="text-xs text-muted font-mono flex-shrink-0">${moduleDone}/${moduleTotal}</span>
     `;
     mod.appendChild(hdr);
+
+    // Module progress bar
+    const modProg = document.createElement('div');
+    modProg.className = 'module-progress';
+    modProg.innerHTML = `<div class="module-progress-fill" style="width: ${moduleTotal ? (moduleDone / moduleTotal) * 100 : 0}%"></div>`;
+    mod.appendChild(modProg);
 
     const body = document.createElement('div');
     body.className = 'module-body mt-5';
@@ -97,6 +109,8 @@ export function renderTree(host) {
         const status = unitStatus(order, unit.id);
         const row = document.createElement('div');
         row.className = `node-row ${status === 'locked' ? 'locked' : ''}`;
+        row.setAttribute('tabindex', '0');
+        row.setAttribute('role', 'button');
         row.innerHTML = `
           <div class="node-dot ${status}"></div>
           <div class="flex-1 min-w-0">
@@ -112,11 +126,11 @@ export function renderTree(host) {
           ls.appendChild(conn);
         }
 
-        if (status === 'locked') {
-          row.addEventListener('click', () => go('/preview/' + unit.id));
-        } else {
-          row.addEventListener('click', () => go('/lesson/' + unit.id));
-        }
+        const target = status === 'locked' ? '/preview/' + unit.id : '/lesson/' + unit.id;
+        row.addEventListener('click', () => go(target));
+        row.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(target); }
+        });
       });
     });
   });

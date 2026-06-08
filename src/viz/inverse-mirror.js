@@ -1,6 +1,6 @@
 // Show f and its inverse, reflected across y = x.
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', good:'#1f6b40', dashed:'#aab3c2' };
+import { C } from './colors.js';
 
 export function renderInverseMirror(host, viz) {
   const f = makeF(viz.f);

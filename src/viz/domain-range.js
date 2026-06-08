@@ -1,6 +1,6 @@
 // Show a function and shade the domain (x-axis interval) and range (y-axis interval).
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', good:'#1f6b40', soft:'#dde6f3', goodSoft:'#d8eedd' };
+import { C } from './colors.js';
 
 export function renderDomainRange(host, viz) {
   const f = makeF(viz.f);

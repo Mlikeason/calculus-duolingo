@@ -1,6 +1,6 @@
 // Visualize x -> a from both sides, with f(x) -> L. Optional hole at (a, L).
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', good:'#1f6b40', arrow:'#9b2d20' };
+import { C } from './colors.js';
 
 export function renderLimitApproach(host, viz) {
   const f = makeF(viz.f);
@@ -58,10 +58,10 @@ export function renderLimitApproach(host, viz) {
   const yLArrow = sy(L) + 22;
   // left arrow pointing toward x=a from the left
   svg.appendChild(arrowR(sx(a - off), yLArrow, sx(a) - 8, yLArrow));
-  svg.appendChild(txt(sx(a - off / 2), yLArrow - 6, 'x → a⁻', 10, C.arrow));
+  svg.appendChild(txt(sx(a - off / 2), yLArrow - 6, 'x → a⁻', 10, C.bad));
   // right arrow pointing toward x=a from the right
   svg.appendChild(arrowL(sx(a + off), yLArrow, sx(a) + 8, yLArrow));
-  svg.appendChild(txt(sx(a + off / 2), yLArrow - 6, 'x → a⁺', 10, C.arrow));
+  svg.appendChild(txt(sx(a + off / 2), yLArrow - 6, 'x → a⁺', 10, C.bad));
 
   // Slider for x with live readout (optional)
   if (viz.interactive !== false) {

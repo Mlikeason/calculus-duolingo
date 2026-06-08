@@ -1,6 +1,6 @@
 // Visualize (1 + 1/n)^n → e as n grows.
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', good:'#1f6b40', dashed:'#aab3c2' };
+import { C } from './colors.js';
 
 export function renderELimit(host) {
   host.innerHTML = '';

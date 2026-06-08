@@ -1,6 +1,6 @@
 // Two function machines in series: x -> g -> u -> f -> y.
 
-const C = { ink:'#0f1626', muted:'#5e6b80', accent:'#2c4a7a', paper:'#ffffff', soft:'#dde6f3' };
+import { C } from './colors.js';
 
 export function renderComposition(host, viz) {
   const g = makeF(viz.g);

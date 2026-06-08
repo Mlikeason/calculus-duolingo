@@ -1,7 +1,7 @@
 // Plot f(x), draggable point a on x-axis. Shows tangent line at (a, f(a))
 // and the slope value (= f'(a) numerically).
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', good:'#1f6b40' };
+import { C } from './colors.js';
 
 export function renderDerivativeSlope(host, viz) {
   const f = makeF(viz.f);

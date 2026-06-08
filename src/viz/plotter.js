@@ -1,7 +1,7 @@
 // Generic function plotter on a Cartesian grid.
 // viz: { f: 'x*x', xMin, xMax, yMin, yMax, samplePoints?: [x,...], showPoint?: true, initialX? }
 
-const C = { ink:'#0f1626', muted:'#5e6b80', line:'#d8dde6', accent:'#2c4a7a', soft:'#dde6f3' };
+import { C } from './colors.js';
 
 export function renderPlotter(host, viz) {
   const f = makeF(viz.f);
@@ -74,7 +74,7 @@ export function renderPlotter(host, viz) {
       h.setAttribute('cx', sx(viz.hole.x));
       h.setAttribute('cy', sy(viz.hole.y));
       h.setAttribute('r', 4.5);
-      h.setAttribute('fill', '#ffffff');
+      h.setAttribute('fill', C.paper);
       h.setAttribute('stroke', C.accent);
       h.setAttribute('stroke-width', '1.8');
       svg.appendChild(h);
@@ -97,7 +97,7 @@ export function renderPlotter(host, viz) {
       a.setAttribute('y1', pad);
       a.setAttribute('x2', sx(viz.asymptote));
       a.setAttribute('y2', H - pad);
-      a.setAttribute('stroke', '#aab3c2');
+      a.setAttribute('stroke', C.dashed);
       a.setAttribute('stroke-width', '1');
       a.setAttribute('stroke-dasharray', '4 4');
       svg.appendChild(a);

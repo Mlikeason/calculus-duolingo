@@ -1,6 +1,6 @@
 // Unit circle: rotate angle θ, show cos θ (horizontal) and sin θ (vertical).
 
-const C = { line:'#d8dde6', muted:'#5e6b80', accent:'#2c4a7a', good:'#1f6b40' };
+import { C } from './colors.js';
 
 export function renderUnitCircle(host, viz) {
   let theta = viz.initial ?? Math.PI / 4; // radians

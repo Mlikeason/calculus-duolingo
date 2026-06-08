@@ -190,9 +190,75 @@
   transition: width 300ms ease;
 }
 
+/* Module states */
+.module-section.module-done {
+  opacity: 0.55;
+  transition: opacity 200ms ease;
+}
+.module-section.module-done:hover {
+  opacity: 0.8;
+}
+.module-progress {
+  height: 3px;
+  background: theme('colors.line');
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.module-progress-fill {
+  height: 100%;
+  background: theme('colors.accent');
+  border-radius: 999px;
+  transition: width 300ms ease;
+}
+
+/* Slider touch target */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: theme('colors.line');
+  border-radius: 999px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: theme('colors.accent');
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* Keyboard focus */
+.node-row:focus-visible {
+  outline: 2px solid theme('colors.accent');
+  outline-offset: -2px;
+  background: theme('colors.accent-soft');
+}
+
 /* Subtle slide-in for lesson content */
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .slide-in { animation: slideIn 220ms ease both; }
+
+/* Answer feedback animations */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+.shake { animation: shake 350ms ease; }
+.pop { animation: pop 250ms ease; }

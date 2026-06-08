@@ -1,14 +1,7 @@
 // A small visualization: an input number enters a box (the function),
 // and the output emerges. The user can change the input with a slider.
 
-const COLORS = {
-  ink: '#0f1626',
-  muted: '#5e6b80',
-  line: '#d8dde6',
-  accent: '#2c4a7a',
-  paper: '#ffffff',
-  soft: '#dde6f3'
-};
+import { C as COLORS } from './colors.js';
 
 export function renderFunctionMachine(host, viz) {
   // viz.f is a string like "2*x + 1"; we evaluate via Function
@@ -107,7 +100,7 @@ function line(x1, y1, x2, y2, stroke) {
 function tri(x, y) {
   const el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
   el.setAttribute('points', `${x},${y - 5} ${x + 7},${y} ${x},${y + 5}`);
-  el.setAttribute('fill', '#5e6b80');
+  el.setAttribute('fill', COLORS.muted);
   return el;
 }
 function text(x, y, s, size, color) {
