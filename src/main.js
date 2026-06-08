@@ -8,7 +8,9 @@ const app = document.getElementById('app');
 function render() {
   const r = currentRoute();
   if (r.name === 'lesson') {
-    renderLesson(app, r.unitId);
+    renderLesson(app, r.unitId, false);
+  } else if (r.name === 'preview') {
+    renderLesson(app, r.unitId, true);
   } else {
     renderTree(app);
   }

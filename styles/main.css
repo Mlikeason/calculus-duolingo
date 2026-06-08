@@ -81,8 +81,8 @@
   transition: background 140ms ease, transform 140ms ease;
 }
 .node-row.locked {
-  cursor: not-allowed;
-  opacity: 0.45;
+  cursor: pointer;
+  opacity: 0.55;
 }
 .node-row:not(.locked):hover {
   background: theme('colors.accent-soft');
@@ -150,6 +150,26 @@
   border-radius: 16px;
   padding: 24px 20px;
   box-shadow: theme('boxShadow.card');
+}
+
+.module-header {
+  cursor: pointer;
+  user-select: none;
+  border-radius: 8px;
+  padding: 4px 0;
+  transition: opacity 140ms ease;
+}
+.module-header:hover { opacity: 0.75; }
+
+.module-chevron {
+  font-size: 1.25rem;
+  line-height: 1;
+  color: theme('colors.muted');
+  transition: transform 200ms ease;
+  flex-shrink: 0;
+}
+.module-chevron.open {
+  transform: rotate(90deg);
 }
 
 /* Progress bar */

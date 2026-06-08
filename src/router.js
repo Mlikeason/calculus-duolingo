@@ -5,6 +5,7 @@ function parseHash() {
   if (!h) return { name: 'tree' };
   const parts = h.split('/');
   if (parts[0] === 'lesson' && parts[1]) return { name: 'lesson', unitId: parts[1] };
+  if (parts[0] === 'preview' && parts[1]) return { name: 'preview', unitId: parts[1] };
   return { name: 'tree' };
 }
 

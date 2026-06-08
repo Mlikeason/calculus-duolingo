@@ -5,7 +5,7 @@ import { renderMath } from './katex-helper.js';
 import { renderExercise } from './exercises/index.js';
 import { renderViz } from './viz/index.js';
 
-export function renderLesson(host, unitId) {
+export function renderLesson(host, unitId, preview = false) {
   const unit = findUnit(unitId);
   if (!unit) {
     host.innerHTML = `<div class="max-w-2xl mx-auto p-8 text-center">
@@ -15,11 +15,13 @@ export function renderLesson(host, unitId) {
     return;
   }
 
-  // Build slides: intro + each exercise
+  // Build slides: intro only for preview, full lesson otherwise
   const slides = [];
   if (unit.intro) slides.push({ kind: 'intro', data: unit.intro });
-  (unit.exercises || []).forEach((ex, i) => slides.push({ kind: 'exercise', data: ex, index: i }));
-  slides.push({ kind: 'done' });
+  if (!preview) {
+    (unit.exercises || []).forEach((ex, i) => slides.push({ kind: 'exercise', data: ex, index: i }));
+    slides.push({ kind: 'done' });
+  }
 
   let idx = 0;
   let correctCount = 0;
@@ -34,15 +36,19 @@ export function renderLesson(host, unitId) {
   top.className = 'border-b border-line bg-paper';
   top.innerHTML = `
     <div class="max-w-2xl mx-auto px-5 py-3 flex items-center gap-4">
-      <button class="text-muted hover:text-ink text-sm" data-action="back">← 退出</button>
-      <div class="flex-1 h-1.5 bg-line rounded overflow-hidden">
-        <div class="h-full bg-accent transition-all" data-progress style="width: 0%"></div>
-      </div>
-      <span class="text-xs text-muted" data-step>1 / ${slides.length}</span>
+      <button class="text-muted hover:text-ink text-sm" data-action="back">← ${preview ? '返回' : '退出'}</button>
+      ${preview
+        ? `<div class="flex-1"></div><span class="text-xs text-muted">预览</span>`
+        : `<div class="flex-1 h-1.5 bg-line rounded overflow-hidden">
+            <div class="h-full bg-accent transition-all" data-progress style="width: 0%"></div>
+          </div>
+          <span class="text-xs text-muted" data-step>1 / ${slides.length}</span>`
+      }
     </div>
   `;
   page.appendChild(top);
   top.querySelector('[data-action="back"]').addEventListener('click', () => {
+    if (preview) { go('/'); return; }
     if (confirm('退出这一节？已答对的题不会丢失（但本节不算完成）')) go('/');
   });
 
@@ -56,7 +62,7 @@ export function renderLesson(host, unitId) {
   bottom.className = 'border-t border-line bg-paper sticky bottom-0';
   bottom.innerHTML = `
     <div class="max-w-2xl mx-auto px-5 py-4 flex justify-end">
-      <button class="btn-primary" data-action="next">继续</button>
+      <button class="${preview ? 'btn' : 'btn-primary'}" data-action="next">${preview ? '← 返回目录' : '继续'}</button>
     </div>
   `;
   page.appendChild(bottom);
@@ -70,6 +76,7 @@ export function renderLesson(host, unitId) {
   }
 
   function updateProgress() {
+    if (preview) return;
     const pct = ((idx + 1) / slides.length) * 100;
     top.querySelector('[data-progress]').style.width = pct + '%';
     top.querySelector('[data-step]').textContent = `${idx + 1} / ${slides.length}`;
@@ -131,7 +138,7 @@ export function renderLesson(host, unitId) {
       slideHost.appendChild(wrap);
       renderMath(wrap);
       setCanAdvance(true);
-      nextBtn.textContent = '开始练习 →';
+      nextBtn.textContent = preview ? '← 返回目录' : '开始练习 →';
     } else if (s.kind === 'exercise') {
       const card = document.createElement('div');
       card.className = 'card p-5 space-y-3 slide-in';
@@ -179,6 +186,7 @@ export function renderLesson(host, unitId) {
 
   nextBtn.addEventListener('click', () => {
     if (!canAdvance) return;
+    if (preview) { go('/'); return; }
     if (idx < slides.length - 1) {
       idx++;
       renderSlide();

@@ -14,9 +14,8 @@ export function renderTree(host) {
   const header = document.createElement('header');
   header.className = 'mb-8';
   header.innerHTML = `
-    <div class="text-xs uppercase tracking-[0.18em] text-muted mb-2">拾级 · 微积分</div>
-    <h1 class="font-serif text-[2rem] leading-tight tracking-tight">一个普通人的微积分</h1>
-    <p class="text-muted mt-2 text-sm">每段 2–3 分钟 · 自定节奏 · 答错不扣分</p>
+    <h1 class="font-serif text-[2rem] leading-tight tracking-tight">微/积</h1>
+    <p class="text-muted mt-2 text-sm">细微处，积跬步</p>
   `;
   page.appendChild(header);
 
@@ -44,20 +43,45 @@ export function renderTree(host) {
     }
   });
 
+  // Find active module (the one containing the first 'available' unit)
+  let activeModuleId = curriculum[curriculum.length - 1].id;
+  for (const m of curriculum) {
+    const hasAvailable = m.lessons.some((l) => l.units.some((u) => unitStatus(order, u.id) === 'available'));
+    if (hasAvailable) { activeModuleId = m.id; break; }
+  }
+
   curriculum.forEach((module) => {
     const mod = document.createElement('section');
     mod.className = 'module-section mb-6';
     const moduleUnits = module.lessons.flatMap((l) => l.units);
     const moduleDone = moduleUnits.filter((u) => isDone(u.id)).length;
-    mod.innerHTML = `
-      <header class="flex items-baseline justify-between mb-5">
-        <div>
+    const isActive = module.id === activeModuleId;
+
+    const hdr = document.createElement('header');
+    hdr.className = 'module-header flex items-center justify-between';
+    hdr.innerHTML = `
+      <div class="flex items-center gap-3 min-w-0">
+        <span class="module-chevron ${isActive ? 'open' : ''}">›</span>
+        <div class="min-w-0">
           <h2 class="font-serif text-xl text-ink">${module.title}</h2>
           ${module.subtitle ? `<p class="text-xs text-muted mt-0.5">${module.subtitle}</p>` : ''}
         </div>
-        <span class="text-xs text-muted font-mono">${moduleDone}/${moduleUnits.length}</span>
-      </header>
+      </div>
+      <span class="text-xs text-muted font-mono flex-shrink-0">${moduleDone}/${moduleUnits.length}</span>
     `;
+    mod.appendChild(hdr);
+
+    const body = document.createElement('div');
+    body.className = 'module-body mt-5';
+    if (!isActive) body.style.display = 'none';
+    mod.appendChild(body);
+
+    hdr.addEventListener('click', () => {
+      const open = body.style.display !== 'none';
+      body.style.display = open ? 'none' : '';
+      hdr.querySelector('.module-chevron').classList.toggle('open', !open);
+    });
+
     page.appendChild(mod);
 
     module.lessons.forEach((lesson, li) => {
@@ -66,7 +90,7 @@ export function renderTree(host) {
       ls.innerHTML = `
         <h3 class="text-[0.75rem] uppercase tracking-[0.12em] text-muted mb-2 ml-3">${lesson.title}</h3>
       `;
-      mod.appendChild(ls);
+      body.appendChild(ls);
 
       lesson.units.forEach((unit, idx) => {
         const status = unitStatus(order, unit.id);
@@ -87,7 +111,9 @@ export function renderTree(host) {
           ls.appendChild(conn);
         }
 
-        if (status !== 'locked') {
+        if (status === 'locked') {
+          row.addEventListener('click', () => go('/preview/' + unit.id));
+        } else {
           row.addEventListener('click', () => go('/lesson/' + unit.id));
         }
       });
@@ -96,7 +122,7 @@ export function renderTree(host) {
 
   const foot = document.createElement('footer');
   foot.className = 'text-center text-xs text-muted mt-12 pb-8';
-  foot.innerHTML = `<span class="opacity-60">一个普通人的微积分 · 拾级版</span>`;
+  foot.innerHTML = `<span class="opacity-60">微/积</span>`;
   page.appendChild(foot);
 
   renderMath(page);
