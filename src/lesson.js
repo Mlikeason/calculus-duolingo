@@ -77,12 +77,13 @@ export function renderLesson(host, unitId) {
 
   function renderSlide() {
     slideHost.innerHTML = '';
+    bottom.style.display = '';
     const s = slides[idx];
     updateProgress();
 
     if (s.kind === 'intro') {
       const wrap = document.createElement('article');
-      wrap.className = 'space-y-5 max-w-prose mx-auto';
+      wrap.className = 'space-y-5 max-w-prose mx-auto slide-in';
       const data = s.data;
       if (data.heading) {
         const h = document.createElement('h1');
@@ -133,7 +134,7 @@ export function renderLesson(host, unitId) {
       nextBtn.textContent = '开始练习 →';
     } else if (s.kind === 'exercise') {
       const card = document.createElement('div');
-      card.className = 'card p-5 space-y-3';
+      card.className = 'card p-5 space-y-3 slide-in';
       const stepLabel = document.createElement('div');
       stepLabel.className = 'text-xs uppercase tracking-wider text-muted';
       stepLabel.textContent = `练习 ${s.index + 1}`;
@@ -151,7 +152,7 @@ export function renderLesson(host, unitId) {
       markDone(unit.id);
       const exCount = (unit.exercises || []).length;
       const wrap = document.createElement('div');
-      wrap.className = 'text-center py-16 space-y-4';
+      wrap.className = 'text-center py-16 space-y-4 slide-in';
       wrap.innerHTML = `
         <div class="font-serif text-3xl">完成</div>
         <p class="text-muted">${unit.title} · 答对 ${correctCount} / ${exCount}</p>

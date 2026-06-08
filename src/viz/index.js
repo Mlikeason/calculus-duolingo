@@ -9,6 +9,8 @@ import { renderLimitApproach } from './limit-approach.js';
 import { renderDiscontinuityTypes } from './discontinuity-types.js';
 import { renderSmallOrders } from './small-orders.js';
 import { renderELimit } from './e-limit.js';
+import { renderSecantTangent } from './secant-tangent.js';
+import { renderDerivativeSlope } from './derivative-slope.js';
 
 export function renderViz(host, viz) {
   switch (viz.type) {
@@ -23,6 +25,8 @@ export function renderViz(host, viz) {
     case 'discontinuity-types': return renderDiscontinuityTypes(host, viz);
     case 'small-orders':        return renderSmallOrders(host, viz);
     case 'e-limit':             return renderELimit(host, viz);
+    case 'secant-tangent':      return renderSecantTangent(host, viz);
+    case 'derivative-slope':    return renderDerivativeSlope(host, viz);
     default:
       host.innerHTML = `<div class="text-muted text-sm">(视觉：${viz.type})</div>`;
   }

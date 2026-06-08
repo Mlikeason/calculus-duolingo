@@ -1,5 +1,5 @@
 import { curriculum, allUnitsInOrder } from '../data/index.js';
-import { isDone, unitStatus } from './state.js';
+import { isDone, unitStatus, reset } from './state.js';
 import { go } from './router.js';
 import { renderMath } from './katex-helper.js';
 
@@ -39,10 +39,8 @@ export function renderTree(host) {
   progress.querySelector('[data-action="reset"]').addEventListener('click', (e) => {
     e.preventDefault();
     if (confirm('确定清空所有进度？')) {
-      import('./state.js').then(({ reset }) => {
-        reset();
-        renderTree(host);
-      });
+      reset();
+      renderTree(host);
     }
   });
 
