@@ -57,7 +57,7 @@ export const m5 = {
             { type: 'choice', prompt: '一阶微分方程的通解含几个任意常数？',
               options: ['零个', '一个', '两个', '看情况'], answer: 1,
               explain: '一阶积一次，产生一个 $C$。二阶积两次，两个常数。' },
-            { type: 'truefalse', prompt: '通解包含了所有的特解。', answer: true,
+            { type: 'truefalse', prompt: '方程 $y\' = 2x$ 的解都能写成 $y = x^2 + C$。', answer: true,
               explain: '每个 $C$ 的值对应一条特解，通解是它们的全体。' },
             { type: 'fill', prompt: '$y\' = \\cos x$，通解 $y = \\sin x + C$。若 $y(\\pi/2) = 0$，则 $C = $ ___', answer: '-1',
               explain: '$\\sin(\\pi/2) + C = 0 \\Rightarrow 1 + C = 0 \\Rightarrow C = -1$。' }
@@ -131,17 +131,17 @@ export const m5 = {
           exercises: [
             { type: 'choice', prompt: '$y\' = 2y$，通解是？',
               options: ['$y = 2x + C$', '$y = Ce^{2x}$', '$y = e^{2x}$', '$y = C \\cdot 2^x$'], answer: 1,
-              explain: '$\\dfrac{dy}{y} = 2\\,dx$，积分 $\\ln|y| = 2x + C_1$，解出 $y = Ce^{2x}$（$C = \\pm e^{C_1}$）。' },
+              explain: '$\\dfrac{dy}{y} = 2\\,dx$，积分 $\\ln|y| = 2x + C_1$，解出 $y = Ce^{2x}$；还需补回分离变量时除以 $y$ 遗漏的零解，所以 $C$ 可以为 0。' },
             { type: 'fill', prompt: '$y\' = -y$，$y(0) = 4$。特解 $y = $ ___', answer: ['4e^(-x)', '4e^{-x}', '4*e^(-x)'],
               explain: '通解 $y = Ce^{-x}$，$y(0) = C = 4$。' },
             { type: 'choice', prompt: '$y\' = y^2$，分离后 $\\dfrac{dy}{y^2} = dx$，积分得？',
               options: ['$\\ln y = x + C$', '$-\\dfrac{1}{y} = x + C$', '$\\dfrac{y^2}{2} = x + C$', '$y = x + C$'], answer: 1,
               explain: '$\\int y^{-2}\\,dy = \\dfrac{y^{-1}}{-1} = -\\dfrac{1}{y}$。' },
             { type: 'choice', prompt: '接上题，解出 $y = $？',
-              options: ['$\\dfrac{1}{x + C}$', '$-\\dfrac{1}{x + C}$', '$\\dfrac{1}{C - x}$', 'B 和 C 等价'], answer: 3,
+              options: ['$x + C$', '$-\\dfrac{1}{x + C}$', '$e^x + C$', '$x^2 + C$'], answer: 1,
               explain: '$-\\dfrac{1}{y} = x + C$，$y = -\\dfrac{1}{x + C} = \\dfrac{1}{C_1 - x}$（令 $C_1 = -C$）。' },
             { type: 'fill', prompt: '$x\\,y\' = y$，分离变量后 $\\dfrac{dy}{y} = \\dfrac{dx}{x}$，积分得 $\\ln|y| = \\ln|x| + C$，化简 $y = $ ___ $\\cdot x$（填常数符号）', answer: ['A', 'C', 'K', 'k'],
-              explain: '$\\ln|y| - \\ln|x| = C$，即 $|y/x| = e^C$，所以 $y = Ax$（$A$ 为任意非零常数）。' }
+              explain: '$\\ln|y| - \\ln|x| = C$，即 $|y/x| = e^C$，所以 $y = Ax$；补回零解后 $A$ 可为任意常数，推导在 $x \\ne 0$ 的区间内成立。' }
           ]
         }
       ]
@@ -194,8 +194,8 @@ export const m5 = {
             { type: 'choice', prompt: '上题乘以 $\\mu = e^x$ 后，左边变成 $(e^x y)\'$，右边是 $e^{2x}$。积分得 $e^x y = \\dfrac{1}{2}e^{2x} + C$，所以 $y = $？',
               options: ['$\\dfrac{1}{2}e^x + Ce^x$', '$\\dfrac{1}{2}e^{2x} + C$', '$\\dfrac{1}{2}e^x + Ce^{-x}$', '$e^{2x} + C$'], answer: 2,
               explain: '除以 $e^x$：$y = \\dfrac{1}{2}e^x + Ce^{-x}$。' },
-            { type: 'truefalse', prompt: '积分因子法只能解线性方程。', answer: true,
-              explain: '它是专门为 $y\' + Py = Q$ 这种线性结构设计的。非线性方程用不了。' },
+            { type: 'truefalse', prompt: '本节的积分因子公式可以直接用于任意非线性方程。', answer: false,
+              explain: '它是专门为 $y\' + Py = Q$ 这种线性结构设计的。不能直接套用于任意非线性方程；更广义的积分因子也用于某些非线性方程。' },
             { type: 'choice', prompt: '$y\' - y = 0$（$P = -1$），积分因子 $\\mu = e^{\\int -1\\,dx} = e^{-x}$。$(e^{-x} y)\' = 0$，积分得 $y = $？',
               options: ['$Ce^x$', '$Ce^{-x}$', '$e^x + C$', '$0$'], answer: 0,
               explain: '$e^{-x} y = C$，$y = Ce^x$。正是 $y\' = y$ 的通解。' }
@@ -222,7 +222,7 @@ export const m5 = {
             takeaway: '$y\' = ky$ → 指数增长/衰减，取决于 $k$ 的正负。'
           },
           exercises: [
-            { type: 'fill', prompt: '初始人口 $y_0 = 1000$，增长率 $k = 0.05$/年。$y(t) = 1000 e^{$ ___ $\\cdot t}$', answer: '0.05',
+            { type: 'fill', prompt: '初始人口 $y_0 = 1000$，增长率 $k = 0.05$/年。在 $y(t) = 1000 e^{at}$ 中，$a = $ ___', answer: '0.05',
               explain: '直接代入公式。' },
             { type: 'choice', prompt: '上题中 $t = 20$ 年后人口约多少？（$e^1 \\approx 2.72$）',
               options: ['$1050$', '$2000$', '$2720$', '$7389$'], answer: 2,
@@ -257,7 +257,7 @@ export const m5 = {
             { type: 'choice', prompt: '牛顿冷却定律说：温差的衰减率正比于温差本身。设温差 $u = T - T_{\\text{env}}$，微分方程是？',
               options: ['$u\' = ku$', '$u\' = -ku$', '$u\' = k$', '$u\' = -k/u$'], answer: 1,
               explain: '温差在缩小，所以 $u\' = -ku$（$k > 0$）。温差指数衰减。' },
-            { type: 'fill', prompt: '咖啡 80°C，室温 20°C，$k = 0.05$/min。10 分钟后温差 $u = 60 e^{-0.5} \\approx 60 \\times 0.607 \\approx $ ___°C（取整数），温度约 $20 + $ ___$= $ ___°C', answer: ['36', '56'],
+            { type: 'fill', prompt: '咖啡 80°C，室温 20°C，$k = 0.05$/min。10 分钟后温差约为 36°C，此时咖啡温度约为 ___ °C（取整数）', answer: '56',
               explain: '$u(10) = 60 e^{-0.5} \\approx 36.4$°C，温度 ≈ $20 + 36 = 56$°C。' }
           ]
         },
@@ -315,7 +315,7 @@ export const m5 = {
             { type: 'choice', prompt: '两个不同实根 $r_1, r_2$ 时通解是？',
               options: ['$y = C_1 e^{r_1 x} + C_2 e^{r_2 x}$', '$y = (C_1 + C_2 x) e^{r_1 x}$', '$y = C_1 \\cos(r_1 x)$', '$y = C e^{(r_1 + r_2)x}$'], answer: 0,
               explain: '两个独立的指数解叠加。' },
-            { type: 'fill', prompt: '所以 $y\'\' - 3y\' + 2y = 0$ 的通解是 $y = C_1 e^{x} + C_2 e^{$ ___ $x}$', answer: '2',
+            { type: 'fill', prompt: '所以 $y\'\' - 3y\' + 2y = 0$ 的通解为 $y = C_1 e^x + C_2 e^{ax}$，其中 $a = $ ___', answer: '2',
               explain: '$r_1 = 1, r_2 = 2$，代入通解公式。' },
             { type: 'truefalse', prompt: '二阶方程的通解含两个任意常数。', answer: true,
               explain: '二阶积两次，产生两个 $C$。需要两个初始条件（如 $y(0), y\'(0)$）才能确定特解。' }
@@ -396,7 +396,7 @@ export const m5 = {
             { type: 'choice', prompt: '阻尼振动中，振幅随时间怎样变化？',
               options: ['不变', '线性减小', '指数减小', '先增后减'], answer: 2,
               explain: '被 $e^{\\alpha t}$（$\\alpha < 0$）包络，指数衰减。' },
-            { type: 'truefalse', prompt: '阻尼越大（$c$ 越大），振动消失得越快。', answer: true,
+            { type: 'truefalse', prompt: '在欠阻尼范围内、质量 $m$ 不变时，$c$ 越大，振幅包络衰减越快。', answer: true,
               explain: '$\\alpha = -c/(2m)$，$c$ 越大 $|\\alpha|$ 越大，衰减越快。' },
             { type: 'choice', prompt: '若阻尼太大（$c^2 > 4mk$），会怎样？',
               options: ['振得更快', '不振了，直接衰减回零', '爆炸', '保持不变'], answer: 1,

@@ -6,17 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test tests/*.test.js",
+    "ios:resources": "node scripts/build-ios-resources.mjs",
+    "ios:project": "python3 scripts/generate-xcode-project.py"
   },
   "engines": {
     "node": ">=22.13"
   },
-  "packageManager": "pnpm@11.3.0",
   "dependencies": {
-    "katex": "^0.16.11"
+    "katex": "^0.19.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "esbuild": "^0.25.12",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.7"

@@ -1,19 +1,5 @@
 import { renderMath } from '../katex-helper.js';
-
-function normalize(s) {
-  return String(s).trim().replace(/\s+/g, '').toLowerCase();
-}
-
-function matches(input, answer) {
-  if (Array.isArray(answer)) return answer.some((a) => matches(input, a));
-  const ni = normalize(input);
-  const na = normalize(answer);
-  if (ni === na) return true;
-  // Try numeric match if both parse as numbers
-  const ai = parseFloat(ni), ba = parseFloat(na);
-  if (!Number.isNaN(ai) && !Number.isNaN(ba)) return Math.abs(ai - ba) < 1e-6;
-  return false;
-}
+import { matchesAnswer } from '../answer-matcher.js';
 
 export function renderFill(wrap, ex, onAnswered) {
   const prompt = document.createElement('div');
@@ -50,7 +36,7 @@ export function renderFill(wrap, ex, onAnswered) {
     if (answered) return;
     if (!input.value.trim()) return;
     answered = true;
-    const correct = matches(input.value, ex.answer);
+    const correct = matchesAnswer(input.value, ex.answer);
     input.classList.add(correct ? 'correct' : 'wrong');
     input.classList.add(correct ? 'pop' : 'shake');
     input.disabled = true;

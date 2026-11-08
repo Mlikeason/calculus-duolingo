@@ -49,7 +49,7 @@ export const m3 = {
             { type: 'choice', prompt: '导数 $f\'(a)$ 几何上代表什么？',
               options: ['函数值 $f(a)$', '$f$ 在 $a$ 处切线的斜率', '$f$ 在 $a$ 处的高度', '两点平均高度'], answer: 1,
               explain: '导数 = 切线斜率。这是它最常用的几何意义。' },
-            { type: 'choice', prompt: '用定义算 $f(x) = x^2$ 的 $f\'(1)$：极限是 $\\displaystyle \\lim_{h \\to 0} \\dfrac{(1+h)^2 - 1}{h}$。化简后等于？',
+            { type: 'choice', prompt: '用定义算 $f(x) = x^2$ 的 $f\'(1)$：极限是 $\\displaystyle \\lim_{h \\to 0} \\dfrac{(1+h)^2 - 1}{h}$。其中的差商（取极限前）化简为？',
               options: ['$h$', '$2 + h$', '$2$', '$1$'], answer: 1,
               explain: '$(1+h)^2 - 1 = 2h + h^2$，除以 $h$ 得 $2 + h$，让 $h \\to 0$ 得 2。' },
             { type: 'fill', prompt: '所以 $f\'(1) = $ ___（接上题）', answer: '2',
@@ -154,7 +154,7 @@ export const m3 = {
             hook: '用极限定义一个个算太累。前人总结了几条「拆都不用拆」的公式，记住即可。最常用的一条：<strong>幂函数求导</strong>。',
             visual: { type: 'derivative-slope', f: 'x*x*x', fLabel: 'f(x) = x³', xMin: -2, xMax: 2, yMin: -3, yMax: 5, initial: 1 },
             intuition: '上图 $f = x^3$，拖动 $a$ 看斜率：$a = 1$ 处斜率 ≈ 3，$a = 2$ 处 ≈ 12。规律：$f\'(a) = 3a^2$，即<em>把指数 3 搬下来当系数，指数自己减 1</em>。',
-            formula: { latex: '(x^n)\' = n \\cdot x^{n - 1}', caption: '对所有实数 $n$ 都成立。$(x)\' = 1$，$(x^2)\' = 2x$，$(x^3)\' = 3x^2$，$(x^{1/2})\' = \\dfrac{1}{2}x^{-1/2}$。' },
+            formula: { latex: '(x^n)\' = n \\cdot x^{n - 1}', caption: '在幂函数有定义且可导的区间内成立（任意实数 $n$ 可先取 $x > 0$）。$(x)\' = 1$，$(x^2)\' = 2x$，$(x^3)\' = 3x^2$，$(x^{1/2})\' = \\dfrac{1}{2}x^{-1/2}$。' },
             takeaway: '指数搬前面，自减一。'
           },
           exercises: [
@@ -209,7 +209,7 @@ export const m3 = {
             { type: 'choice', prompt: '$(e^x)\'$ 等于？',
               options: ['$e$', '$xe^{x-1}$', '$e^x$', '$1$'], answer: 2,
               explain: '$e^x$ 求导还是它自己。这是 $e$ 这个数最本质的特征。' },
-            { type: 'fill', prompt: '$(\\ln x)\' = \\dfrac{1}{$ ___ $}$', answer: 'x',
+            { type: 'fill', prompt: '$(\\ln x)\' = 1/a$，其中 $a = $ ___', answer: 'x',
               explain: '$\\dfrac{1}{x}$，这条公式后面会高频出现。' },
             { type: 'choice', prompt: '$f(x) = e^x$ 在 $x = 0$ 处的导数 $f\'(0)$ 等于？',
               options: ['$0$', '$1$', '$e$', '$\\infty$'], answer: 1,
@@ -274,8 +274,8 @@ export const m3 = {
             { type: 'truefalse', prompt: '$(fg)\' = f\' \\cdot g\'$。', answer: false,
               explain: '错。这是个常见误区。正确公式是 $f\'g + fg\'$。' },
             { type: 'choice', prompt: '$h(x) = x \\ln x$，$h\'(x) = ?$',
-              options: ['$\\ln x$', '$\\dfrac{1}{x}$', '$1 + \\ln x$', '$\\ln x + 1$'], answer: 2,
-              explain: '$1 \\cdot \\ln x + x \\cdot \\dfrac{1}{x} = \\ln x + 1$（选项 3 和 4 表达一样，3 写法更标准）。' }
+              options: ['$\\ln x$', '$\\dfrac{1}{x}$', '$1 + \\ln x$', '$x + 1$'], answer: 2,
+              explain: '$1 \\cdot \\ln x + x \\cdot \\dfrac{1}{x} = \\ln x + 1$。' }
           ]
         },
         {

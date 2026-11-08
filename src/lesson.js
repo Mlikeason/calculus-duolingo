@@ -19,6 +19,10 @@ export function renderLesson(host, unitId, preview = false) {
   const curIndex = order.indexOf(unit.id);
   const nextUnitId = order[curIndex + 1];
   const status = unitStatus(order, unit.id);
+  if (!preview && status === 'locked') {
+    renderLesson(host, unitId, true);
+    return;
+  }
 
   let slides = [];
   if (unit.intro) slides.push({ kind: 'intro', data: unit.intro });
@@ -54,7 +58,7 @@ export function renderLesson(host, unitId, preview = false) {
   page.appendChild(top);
   top.querySelector('[data-action="back"]').addEventListener('click', () => {
     if (preview) { go('/'); return; }
-    if (confirm('退出这一节？已答对的题不会丢失（但本节不算完成）')) go('/');
+    if (confirm('退出这一节？本次答题进度不会保存，已完成的课程不受影响。')) go('/');
   });
 
   // Slide area
@@ -173,7 +177,7 @@ export function renderLesson(host, unitId, preview = false) {
       nextBtn.textContent = idx === slides.length - 2 ? '完成 →' : '继续';
     } else if (s.kind === 'done') {
       markDone(unit.id);
-      const exCount = (unit.exercises || []).length;
+      const exCount = slides.filter(slide => slide.kind === 'exercise').length;
       const hasWrong = wrongIndices.length > 0;
       const wrap = document.createElement('div');
       wrap.className = 'text-center py-16 space-y-4 slide-in';
