@@ -4,11 +4,13 @@
 
 ## 当前发布状态（2026-11-08）
 
-- 最终签名归档：`build/Weiji-final.xcarchive`；App Store 分发包：`build/export/Weiji.ipa`，导出成功。
+- 最新签名归档：`build/Weiji-verified.xcarchive`；App Store 分发包：`build/export/Weiji.ipa`，导出成功。此包仍需完成下列发布验证，不代表已可提交审核。
 - 官网、支持和隐私页面已发布到当前 `finding-m` 项目，生产部署 `dpl_JE21BeYjinWf1q9x8N3xAZ3waeNe`；三个页面和原首页 HTTP 200。裸域名正常跳转至 `www.zhuhong.me`。
 - 网站源码副本在 `release/website/weiji/`，已同步到 `/Users/hoo/zhuhong-journal/weiji/` 并加入部署白名单。旧 `zhuhong-me` GitHub 仓库中的页面也已保存，但当前主域名由 `finding-m` 提供服务。
 - Xcode 上传尝试返回：App Store Connect 中不存在 Bundle ID `me.zhuhong.weiji` 的 App 记录。**应用尚未上传成功、尚未提交审核、尚未上架**；需要先在正确团队创建记录。浏览器登录验证仍待完成。
-- 最新 Swift 单元测试 5 项全部通过；完整答题恢复与错题流程的 XCUITest 已通过。
+- 最新 Swift 单元测试 6 项全部通过；完整答题恢复与错题流程的 XCUITest 已通过。
+- Duo 展开横屏、竖屏与折叠后的课程布局已检查；`release/screenshots/` 中 JPEG 为不含透明通道的系统截图，PNG 保留作适配证据。普通 iPhone / iPad 的截图测试两次停在模拟器调试器启动阶段，尚未取得完整商店截图集。
+- **发布门槛：** Duo 模拟器中 PencilKit 笔画数据保存正常，但画布仍显示空白。需继续诊断并在真机确认，详见 `docs/REVIEW.md`。Mac 锁屏后界面验证已停止。
 
 ## 基本信息
 

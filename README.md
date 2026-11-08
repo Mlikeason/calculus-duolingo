@@ -4,6 +4,8 @@
 
 开发者：Zhu Hong · [官网](https://zhuhong.me/weiji/) · [支持](https://zhuhong.me/weiji/support.html) · [隐私政策](https://zhuhong.me/weiji/privacy.html)
 
+当前为发布候选开发版本，尚未上传或提交 App Store。草稿的模拟器显示问题和完整商店截图仍待验证，详见 [发布门槛](docs/REVIEW.md#发布前的未解决问题)。
+
 ## 内容与体验
 
 - 5 个模块、78 节课程、359 道练习、13 类交互图形。

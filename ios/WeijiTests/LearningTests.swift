@@ -1,7 +1,26 @@
 import XCTest
+import PencilKit
 @testable import Weiji
 
 final class LearningTests: XCTestCase {
+    @MainActor func testNotebookPersistsWithoutDependingOnCanvasLifetime() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let notebook = Notebook(unitID: "test", directory: directory)
+        let points = [CGPoint(x: 20, y: 20), CGPoint(x: 100, y: 80)].enumerated().map {
+            PKStrokePoint(location: $0.element, timeOffset: Double($0.offset), size: CGSize(width: 3, height: 3), opacity: 1, force: 1, azimuth: 0, altitude: .pi / 2)
+        }
+        let stroke = PKStroke(ink: PKInk(.pen, color: .black), path: PKStrokePath(controlPoints: points, creationDate: Date()))
+        notebook.changed(PKDrawing(strokes: [stroke]))
+        notebook.save()
+        XCTAssertNil(notebook.error)
+        let restored = Notebook(unitID: "test", directory: directory)
+        XCTAssertEqual(restored.drawing.strokes.count, 1)
+        XCTAssertEqual(restored.drawing.bounds, notebook.drawing.bounds)
+        XCTAssertNil(restored.canvas, "Drawing survives without retaining a rendering surface")
+        restored.clear()
+        XCTAssertTrue(Notebook(unitID: "test", directory: directory).drawing.strokes.isEmpty)
+    }
     func testFullNumericParsing() {
         for (input, answer) in [("1/2", "1/6"), ("1", "1/x"), ("3x", "3"), ("8abc", "8"), ("", "0"), ("1/0", "1")] {
             XCTAssertFalse(AnswerMatcher.matches(input, answers: [answer]))
