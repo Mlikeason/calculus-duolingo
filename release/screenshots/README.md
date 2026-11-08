@@ -2,13 +2,17 @@
 
 全部为实际应用截图，没有合成界面或拉伸。
 
+## Build 2 iPhone 商店截图
+
+`iphone-01-learning-route.jpg`、`iphone-02-interactive-lesson.jpg`、`iphone-03-handwriting-workspace.jpg` 为当前界面，尺寸 1320 × 2868，JPEG、无透明通道。来自通过的 `build/Store-final-iPhone.xcresult`，已经目视检查。
+
 ## Build 2 真机验证
 
 - `duo-device-02-interactive-lesson.jpg`：最新练习、两列短选项，以及仅位于题目面板底部的 44 pt 继续按钮。
 - `duo-device-03-handwriting-workspace.jpg`：折叠屏的草稿工具。
 - `duo-device-notebook-restored.jpg`：绘制、切换工具、旋转和重启后，真实笔迹仍可见。
 
-以上 JPEG 来自 `build/Weiji-layout-final-device.xcresult` 的两项通过测试，不含透明通道。测试使用独立的测试目录。截图时间为真机时间，主要用于验证；普通 iPhone / iPad 商店截图仍在补齐。
+以上 JPEG 来自 `build/Weiji-layout-final-device.xcresult` 的两项通过测试，不含透明通道。测试使用独立的测试目录。截图时间为真机时间，主要用于验证；普通 iPhone 截图已补齐，iPad 截图仍在补拍。
 
 ## 历史截图
 

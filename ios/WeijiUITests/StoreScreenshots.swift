@@ -25,7 +25,9 @@ final class StoreScreenshots: XCTestCase {
         capture(app, "03-handwriting-workspace")
     }
     @MainActor private func capture(_ app: XCUIApplication, _ name: String) {
-        let attachment = XCTAttachment(data: app.screenshot().image.jpegData(compressionQuality: 0.98)!, uniformTypeIdentifier: "public.jpeg")
+        // Capture the full framebuffer. Cropping an application screenshot and
+        // re-encoding UIImage can mismatch landscape bounds / EXIF orientation.
+        let attachment = XCTAttachment(data: XCUIScreen.main.screenshot().pngRepresentation, uniformTypeIdentifier: "public.png")
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)

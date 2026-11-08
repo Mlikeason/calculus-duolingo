@@ -34,7 +34,7 @@
 - `npm run build` 成功；Build 2 真机开发签名构建、安装、正常启动成功。先前 Build 1 的 Release Archive / IPA 已过时，待重新生成。
 - iPhone Duo 展开横屏与竖屏已目视验证原生导航、课程 / 图形双栏和安全区域；折叠及旋转后题目位置和选项顺序保持不变。截图保存在 `release/screenshots/`。
 - Build 2 真机 `NotebookFlowTests` 与 `StoreScreenshots` 共 2 项通过，结果为 `build/Weiji-layout-final-device.xcresult`；随后仅调整首页网格的窄屏宽度计算，再次编译安装。
-- iPad 的一次截图测试未在期限内取得 WebKit 答案选项；保留失败结果，不计为通过。商店截图完成情况见截图目录说明。
+- 普通 iPhone 最新截图测试通过，三张 1320 × 2868 JPEG 已目视检查；结果为 `build/Store-final-iPhone.xcresult`。iPad 的一次截图测试未在期限内取得 WebKit 答案选项；保留失败结果，不计为通过。商店截图完成情况见截图目录说明。
 
 ## 草稿问题的定位与验证
 
