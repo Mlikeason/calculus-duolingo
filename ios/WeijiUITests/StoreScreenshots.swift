@@ -4,6 +4,7 @@ import UIKit
 final class StoreScreenshots: XCTestCase {
     @MainActor func testStoreScreenshots() {
         continueAfterFailure = false
+        if UIDevice.current.userInterfaceIdiom == .pad { XCUIDevice.shared.orientation = .landscapeLeft }
         let app = XCUIApplication()
         app.launchArguments = ["--ui-testing", "--reset-test-data"]
         app.launch()
@@ -14,11 +15,12 @@ final class StoreScreenshots: XCTestCase {
         let next = app.buttons["nextStep"]
         XCTAssertTrue(next.waitForExistence(timeout: 20))
         next.tap()
-        XCTAssertTrue(app.webViews.buttons["7"].waitForExistence(timeout: 20))
+        // Cold simulator WebKit processes can start slowly on a busy build host.
+        XCTAssertTrue(app.webViews.buttons["7"].waitForExistence(timeout: 90))
         capture(app, "02-interactive-lesson")
-        let expandedTool = app.buttons["手写草稿"]
-        if expandedTool.exists { expandedTool.tap() }
-        else { app.segmentedControls["learningTools"].buttons["草稿"].tap() }
+        if !app.buttons["清空本节草稿"].isHittable {
+            app.segmentedControls["learningTools"].buttons["草稿"].tap()
+        }
         XCTAssertTrue(app.buttons["清空本节草稿"].waitForExistence(timeout: 10))
         capture(app, "03-handwriting-workspace")
     }

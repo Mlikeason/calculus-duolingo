@@ -1,16 +1,17 @@
-# 实际应用截图
+# 应用截图与版本
 
-2026-11-08 使用 iOS 27.2 的 iPhone Duo 模拟器获取，无合成界面、无拉伸。
+全部为实际应用截图，没有合成界面或拉伸。
 
-| 文件 | 像素尺寸 | 用途 |
-| --- | --- | --- |
-| duo-inner-home.jpg | 2853 × 2007 | 展开横屏首页；JPEG，无透明通道 |
-| duo-inner-lesson.jpg | 2853 × 2007 | 展开横屏课程与参考图形；JPEG，无透明通道 |
-| duo-inner-home.png | 2853 × 2007 | 较早的展开首页布局验证 |
-| duo-inner-lesson.png | 2853 × 2007 | 较早的展开课程布局验证 |
-| duo-inner-portrait.png | 2007 × 2853 | 展开竖屏双栏布局验证 |
-| duo-outer-lesson.png | 1398 × 2034 | 折叠后的课程布局验证 |
+## Build 2 真机验证
 
-PNG 带透明通道，只作为原始验证证据。商店上传优先使用 JPEG；普通 iPhone 与 iPad 截图集尚待补齐。
+- `duo-device-02-interactive-lesson.jpg`：最新练习、两列短选项，以及仅位于题目面板底部的 44 pt 继续按钮。
+- `duo-device-03-handwriting-workspace.jpg`：折叠屏的草稿工具。
+- `duo-device-notebook-restored.jpg`：绘制、切换工具、旋转和重启后，真实笔迹仍可见。
 
-`ios/WeijiUITests/StoreScreenshots.swift` 提供首页、课程和草稿工具的 JPEG 截图流程。本机两次运行在调试器启动阶段停滞后取消，未声明该截图测试通过。PencilKit 的可见绘制仍有待解决的验证问题，参见 `docs/REVIEW.md`。
+以上 JPEG 来自 `build/Weiji-layout-final-device.xcresult` 的两项通过测试，不含透明通道。测试使用独立的测试目录。截图时间为真机时间，主要用于验证；普通 iPhone / iPad 商店截图仍在补齐。
+
+## 历史截图
+
+`archive-build1/` 为此前的旧版布局与早期草稿验证，不能用于宣传当前 Build 2。保留这些文件用于对照。
+
+`ios/WeijiUITests/StoreScreenshots.swift` 可重拍首页、练习和草稿三张实际 JPEG。正式上传前应核对所选 App Store 尺寸槽位及截图版本；不能把旧图拉伸成所需尺寸。

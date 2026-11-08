@@ -85,7 +85,8 @@ window.renderLesson = p => {
       const items = exercise.type === 'truefalse' ? ['对', '错'] : exercise.options;
       const order = exercise.type === 'truefalse' ? [0, 1] : p.order;
       const correctIndex = exercise.type === 'truefalse' ? (exercise.answer ? 0 : 1) : exercise.answer;
-      const list = block('div', '', 'choices');
+      const shortOptions = items.every(item => String(item).replace(/<[^>]+>/g, '').length < 18);
+      const list = block('div', '', shortOptions ? 'choices short' : 'choices');
       for (const index of order) {
         const button = block('button', items[index], 'option');
         if (p.submitted) {

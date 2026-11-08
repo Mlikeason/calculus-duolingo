@@ -4,13 +4,13 @@
 
 ## 当前发布状态（2026-11-08）
 
-- 最新签名归档：`build/Weiji-verified.xcarchive`；App Store 分发包：`build/export/Weiji.ipa`，导出成功。此包仍需完成下列发布验证，不代表已可提交审核。
+- 当前源码为 1.0.0 (2)。`build/Weiji-verified.xcarchive` 和 `build/export/Weiji.ipa` 是先前 Build 1，未包含最新图标与界面，不能作为当前版本上传；提交前需重新签名归档和导出。
 - 官网、支持和隐私页面已发布到当前 `finding-m` 项目，生产部署 `dpl_JE21BeYjinWf1q9x8N3xAZ3waeNe`；三个页面和原首页 HTTP 200。裸域名正常跳转至 `www.zhuhong.me`。
 - 网站源码副本在 `release/website/weiji/`，已同步到 `/Users/hoo/zhuhong-journal/weiji/` 并加入部署白名单。旧 `zhuhong-me` GitHub 仓库中的页面也已保存，但当前主域名由 `finding-m` 提供服务。
-- Xcode 上传尝试返回：App Store Connect 中不存在 Bundle ID `me.zhuhong.weiji` 的 App 记录。**应用尚未上传成功、尚未提交审核、尚未上架**；需要先在正确团队创建记录。浏览器登录验证仍待完成。
-- 最新 Swift 单元测试 6 项全部通过；完整答题恢复与错题流程的 XCUITest 已通过。
-- Duo 展开横屏、竖屏与折叠后的课程布局已检查；`release/screenshots/` 中 JPEG 为不含透明通道的系统截图，PNG 保留作适配证据。普通 iPhone / iPad 的截图测试两次停在模拟器调试器启动阶段，尚未取得完整商店截图集。
-- **发布门槛：** Duo 模拟器中 PencilKit 笔画数据保存正常，但画布仍显示空白。需继续诊断并在真机确认，详见 `docs/REVIEW.md`。Mac 锁屏后界面验证已停止。
+- Xcode 上传尝试返回：App Store Connect 中不存在 Bundle ID `me.zhuhong.weiji` 的 App 记录。**应用尚未上传成功、尚未提交审核、尚未上架**；需要先在正确团队创建记录。用户已确认登录；App 记录创建和上传尚未完成。
+- Build 2 已签名安装并在用户真机正常启动；最新 Swift 单元测试 7 项通过。真机 XCUITest 的手写可见性 / 重启恢复与截图流程均通过；先前完整答题恢复与错题流程也已通过。
+- 截图与对应版本见 `release/screenshots/README.md`。最新真机课程与手写截图已取得；普通 iPhone / iPad 商店截图仍在补齐，不使用旧版布局截图充当新版截图。
+- 草稿空白根因为动态颜色被保存成白色。现已固定黑色笔迹 / 白纸，恢复旧单色笔迹；真机可见绘制、切换工具、旋转与重启测试均通过。最终商店归档、截图和 App Store Connect 流程仍需完成。
 
 ## 基本信息
 
@@ -20,7 +20,7 @@
 | 副标题 | 交互图形、每日微课与手写推演 |
 | Bundle ID | me.zhuhong.weiji |
 | SKU | weiji-ios-001 |
-| 版本 / Build | 1.0.0 / 1 |
+| 版本 / Build | 1.0.0 / 2 |
 | 主语言 | 简体中文 |
 | 主分类 | 教育 |
 | 版权 | 2026 Zhu Hong |
@@ -44,7 +44,7 @@
 • 看得见的数学：拖动图形参数，观察输入、曲线、斜率与面积怎样变化。
 • 有反馈的练习：选择、判断与填空题，答题后查看解释；答错的题自动进入错题本。
 • 随手推演：使用原生手写草稿记录思路，支持手指，以及兼容 iPad 上的 Apple Pencil。
-• 为大屏和展开屏幕设计：在足够宽的学习空间中并排查看题目与参考图形或草稿，较窄时通过工具切换继续。
+• 为大屏和展开屏幕设计：宽屏同时查看题目、参考图形和草稿，继续按钮只位于题目下方；较窄时通过工具切换继续。
 • 接着上次学：保存未完成课程、答案、图形参数与草稿。
 • 离线且专注：课程随应用安装，无需注册，无广告或行为追踪。
 
@@ -62,7 +62,7 @@ No sign-in or demo account is required. All lessons, fonts and interactive graph
 
 To test: open 学习 (Learn), tap 继续学习 (Continue), then 开始练习 (Start exercises). Submit an answer and tap 继续 (Continue). Incorrect answers appear in 复习 (Review). Locked lessons can be previewed; completing the preceding lesson unlocks their exercises.
 
-On a regular-width window, including the unfolded iPhone Duo, the lesson and reference / handwriting workspace appear side by side. Compact windows use a segmented tool switcher. Accessibility text sizes prioritize a single readable column.
+On a regular-width window, including the unfolded iPhone Duo, the lesson, reference and handwriting workspace use the available area. Wide windows show three columns; narrower expanded windows place notes below the two study panes. Continue stays inside the lesson pane. Compact windows use a segmented tool switcher. Accessibility text sizes prioritize a single readable column.
 
 The local WKWebView renders bundled mathematics and diagrams; navigation, scoring, persistence, review and handwriting are native. It does not download executable app content.
 
@@ -76,7 +76,7 @@ The local WKWebView renders bundled mathematics and diagrams; navigation, scorin
 ## 提交顺序
 
 1. 在正确开发者团队下创建 iOS App 记录，匹配 Bundle ID。
-2. 上传 `build/export/Weiji.ipa`，等待 Apple 处理完成。
+2. 重新归档并导出 Build 2，核对包内版本和测试后再上传，等待 Apple 处理完成。
 3. 填写本页元数据、审核联系资料、隐私问卷、年龄评级、价格和销售范围。
 4. 使用实际应用画面提交当前商店要求的 iPhone / iPad 截图，不拉伸其他尺寸的截图。
 5. 选中处理后的构建并提交审核；以 App Store Connect 的状态作为最终结果。

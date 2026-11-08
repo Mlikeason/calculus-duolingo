@@ -3,6 +3,32 @@ import PencilKit
 @testable import Weiji
 
 final class LearningTests: XCTestCase {
+    @MainActor func testLegacyWhiteInkBecomesVisibleWithoutLosingGeometry() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let points = [CGPoint(x: 30, y: 40), CGPoint(x: 120, y: 150)].enumerated().map {
+            PKStrokePoint(location: $0.element, timeOffset: Double($0.offset), size: CGSize(width: 3, height: 3), opacity: 1, force: 1, azimuth: 0, altitude: .pi / 2)
+        }
+        let stroke = PKStroke(ink: PKInk(.pen, color: .white), path: PKStrokePath(controlPoints: points, creationDate: Date()))
+        let drawing = PKDrawing(strokes: [stroke])
+        let notebook = Notebook(unitID: "legacy", directory: directory)
+        try FileManager.default.createDirectory(at: notebook.url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try drawing.dataRepresentation().write(to: notebook.url)
+        let restored = Notebook(unitID: "legacy", directory: directory)
+        XCTAssertEqual(restored.drawing.strokes.count, 1)
+        XCTAssertEqual(restored.drawing.bounds, drawing.bounds)
+        let pen = try XCTUnwrap(restored.tool as? PKInkingTool)
+        // PencilKit normalizes grayscale input into sRGB; compare displayed
+        // components rather than UIColor's color-space-dependent equality.
+        for color in [restored.drawing.strokes[0].ink.color, pen.color] {
+            var red: CGFloat = 1, green: CGFloat = 1, blue: CGFloat = 1, alpha: CGFloat = 0
+            XCTAssertTrue(color.getRed(&red, green: &green, blue: &blue, alpha: &alpha))
+            XCTAssertEqual(red, 0, accuracy: 0.001)
+            XCTAssertEqual(green, 0, accuracy: 0.001)
+            XCTAssertEqual(blue, 0, accuracy: 0.001)
+            XCTAssertEqual(alpha, 1, accuracy: 0.001)
+        }
+    }
     @MainActor func testNotebookPersistsWithoutDependingOnCanvasLifetime() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }

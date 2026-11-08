@@ -13,7 +13,16 @@ import Observation
     init(unitID: String, directory: URL) {
         url = directory.appendingPathComponent("Drawings", isDirectory: true).appendingPathComponent(unitID + ".drawing")
         if FileManager.default.fileExists(atPath: url.path) {
-            do { drawing = try PKDrawing(data: Data(contentsOf: url)) }
+            do {
+                let saved = try PKDrawing(data: Data(contentsOf: url))
+                // This notebook has always offered a single monochrome pen.
+                // Older builds persisted dynamic .label as white in dark traits.
+                drawing = PKDrawing(strokes: saved.strokes.map { original in
+                    var stroke = original
+                    stroke.ink = PKInk(original.ink.inkType, color: .black)
+                    return stroke
+                })
+            }
             catch { self.error = "草稿未能读取：\(error.localizedDescription)" }
         }
     }
@@ -33,7 +42,7 @@ import Observation
             try drawing.dataRepresentation().write(to: url, options: .atomic)
         } catch { self.error = "草稿未能保存：\(error.localizedDescription)" }
     }
-    var tool: PKTool { erase ? PKEraserTool(.vector) : PKInkingTool(.pen, color: .label, width: 3) }
+    var tool: PKTool { erase ? PKEraserTool(.vector) : PKInkingTool(.pen, color: .black, width: 3) }
     func clear() { drawing = PKDrawing(); canvas?.drawing = drawing; revision += 1; save() }
 }
 
@@ -45,22 +54,31 @@ struct PencilCanvas: UIViewRepresentable {
         // folding and rotation may rebuild this SwiftUI branch.
         let canvas = PKCanvasView()
         canvas.drawingPolicy = .anyInput
-        canvas.backgroundColor = .secondarySystemGroupedBackground
+        canvas.overrideUserInterfaceStyle = .light
+        canvas.backgroundColor = .white
         canvas.isScrollEnabled = true
         canvas.contentSize = CGSize(width: 1000, height: 1400)
         canvas.accessibilityLabel = "手写草稿，支持手指或 Apple Pencil"
+        canvas.accessibilityIdentifier = "notebookCanvas"
         canvas.drawing = notebook.drawing
         canvas.tool = notebook.tool
+        context.coordinator.erase = notebook.erase
         canvas.delegate = context.coordinator
         notebook.canvas = canvas
         return canvas
     }
-    func updateUIView(_ uiView: PKCanvasView, context: Context) { uiView.tool = notebook.tool }
+    func updateUIView(_ uiView: PKCanvasView, context: Context) {
+        if context.coordinator.erase != notebook.erase {
+            uiView.tool = notebook.tool
+            context.coordinator.erase = notebook.erase
+        }
+    }
     static func dismantleUIView(_ uiView: PKCanvasView, coordinator: Coordinator) {
         uiView.delegate = nil
     }
     @MainActor final class Coordinator: NSObject, PKCanvasViewDelegate {
         let notebook: Notebook
+        var erase = false
         init(_ notebook: Notebook) { self.notebook = notebook }
         func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
             guard notebook.canvas === canvasView else { return }
@@ -75,17 +93,16 @@ struct NotebookView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("留一点推演的空间").font(.caption).foregroundStyle(.secondary)
+                Label("手写草稿", systemImage: "pencil.tip").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
                 Spacer()
                 Button { notebook.canvas?.undoManager?.undo() } label: { Image(systemName: "arrow.uturn.backward") }.accessibilityLabel("撤销笔画")
                 Button {
                     notebook.erase.toggle()
                 } label: { Image(systemName: notebook.erase ? "pencil.tip" : "eraser") }.accessibilityLabel(notebook.erase ? "切换为画笔" : "切换为橡皮擦")
                 Button { clearing = true } label: { Image(systemName: "trash") }.accessibilityLabel("清空本节草稿")
-            }.buttonStyle(.bordered).controlSize(.regular).padding(12)
+            }.buttonStyle(.borderless).controlSize(.regular).padding(.horizontal, 12).frame(minHeight: 44)
             Divider()
             PencilCanvas(notebook: notebook)
-            Text("支持手指与 Apple Pencil · 自动保存").font(.caption2).foregroundStyle(.secondary).padding(8)
         }
         .confirmationDialog("清空本节手写草稿？", isPresented: $clearing, titleVisibility: .visible) {
             Button("清空草稿", role: .destructive) { notebook.clear() }

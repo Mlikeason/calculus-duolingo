@@ -9,52 +9,41 @@ struct RootView: View {
     @Bindable var store: LearningStore
     @State private var selectedModule: String?
     @State private var destination: LessonDestination?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    var module: CourseModule { store.modules.first { $0.id == selectedModule } ?? store.modules[0] }
     var body: some View {
         TabView {
-            NavigationSplitView {
-                List(selection: $selectedModule) {
-                    Section {
-                        VStack(alignment: .leading, spacing: 9) {
-                            Text("细微处，积跬步。") .font(.title2.weight(.medium)).fontDesign(.serif)
-                            Text("每天一点，理解变化与累积。") .font(.subheadline).foregroundStyle(.secondary)
-                        }.padding(.vertical, 12)
-                        if let unit = store.resumeUnit {
-                            Button { open(unit) } label: {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Label("继续学习", systemImage: "play.circle.fill").font(.headline)
-                                    Text(unit.title).font(.subheadline).foregroundStyle(.secondary)
-                                }.padding(.vertical, 8)
-                            }.accessibilityIdentifier("resumeLesson")
-                        }
-                    }
-                    Section("学习路线 · 5 个模块") {
-                        ForEach(store.modules) { module in
-                            NavigationLink(value: module.id) {
-                                HStack(spacing: 14) {
-                                    Image(systemName: module.symbol).font(.title3).foregroundStyle(Theme.accent).frame(width: 30)
-                                    VStack(alignment: .leading, spacing: 5) {
-                                        Text(module.shortTitle).font(.headline)
-                                        Text("\(done(module)) / \(module.units.count) 节").font(.caption).foregroundStyle(.secondary)
-                                    }
-                                }.padding(.vertical, 7)
+            NavigationStack {
+                GeometryReader { geometry in
+                    let wide = geometry.size.width >= 600 && !dynamicTypeSize.isAccessibilitySize
+                    HStack(spacing: 0) {
+                        if wide { moduleRail.frame(width: geometry.size.width < 800 ? 156 : 184) }
+                        VStack(spacing: 0) {
+                            if !wide {
+                                HStack(spacing: 10) {
+                                    Image("BrandMark").resizable().scaledToFit().frame(width: 38, height: 38).clipShape(RoundedRectangle(cornerRadius: 9))
+                                    Text("微/积").font(.title2.weight(.semibold))
+                                    Spacer()
+                                    Text("每天一点，理解变化与累积").font(.caption2).foregroundStyle(.secondary)
+                                }.padding(.horizontal, 16).padding(.top, 8).padding(.bottom, 10)
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 8) {
+                                        ForEach(store.modules) { item in
+                                            Button { selectedModule = item.id } label: {
+                                                Text(item.shortTitle).font(.subheadline.weight(.medium)).padding(.horizontal, 13).padding(.vertical, 10)
+                                                    .foregroundStyle(item.id == module.id ? Color.white : Color.primary)
+                                                    .background(item.id == module.id ? Theme.accent : Theme.card, in: Capsule())
+                                            }.buttonStyle(.plain)
+                                        }
+                                    }.padding(.horizontal, 16)
+                                }.padding(.bottom, 8)
                             }
+                            ModuleView(module: module, store: store,
+                                       availableWidth: geometry.size.width - (wide ? (geometry.size.width < 800 ? 156 : 184) : 0), open: open)
                         }
-                    }
-                    Section {
-                        Label("78 节微课，随时离线学习", systemImage: "checkmark.icloud")
-                            .font(.footnote).foregroundStyle(.secondary)
-                    }
-                }
-                .navigationTitle("微/积")
-                .navigationSplitViewColumnWidth(min: 250, ideal: 290, max: 340)
-            } detail: {
-                if let module = store.modules.first(where: { $0.id == selectedModule }) {
-                    ModuleView(module: module, store: store, open: open)
-                } else {
-                    OverviewView(store: store, open: open)
-                }
-            }
-            .tabItem { Label("学习", systemImage: "book.closed") }
+                    }.background(Theme.background)
+                }.toolbar(.hidden, for: .navigationBar)
+            }.tabItem { Label("学习", systemImage: "book.closed") }
             NavigationStack {
                 List {
                     if store.progress.mistakes.isEmpty {
@@ -81,81 +70,120 @@ struct RootView: View {
             NavigationStack { SettingsScreen(store: store) }
                 .tabItem { Label("设置", systemImage: "gearshape") }
         }
+        .onAppear {
+            if selectedModule == nil, let resume = store.resumeUnit {
+                selectedModule = store.modules.first { $0.units.contains { $0.id == resume.id } }?.id
+            }
+        }
         .fullScreenCover(item: $destination) { item in LessonScreen(unit: item.unit, store: store, review: item.review) }
         .alert("存储提示", isPresented: Binding(get: { store.storageError != nil }, set: { if !$0 { store.storageError = nil } })) {
             Button("知道了") { store.storageError = nil }
         } message: { Text(store.storageError ?? "") }
     }
-    func done(_ module: CourseModule) -> Int { module.units.filter { store.progress.completed[$0.id] != nil }.count }
-    func open(_ unit: CourseUnit) { destination = LessonDestination(unit: unit) }
-}
-
-struct OverviewView: View {
-    let store: LearningStore
-    let open: (CourseUnit) -> Void
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
-                Text("把微积分，\n变成看得见的直觉。")
-                    .font(.system(.largeTitle, design: .serif).weight(.medium)).lineSpacing(8)
-                Text("从一条函数开始，走向变化与累积。\n读一小节，动手试一试，再把理解留下来。")
-                    .foregroundStyle(.secondary).lineSpacing(5)
-                HStack(spacing: 18) {
-                    metric("78", "微课程"); metric("359", "练习题"); metric("13", "交互图形")
+    var moduleRail: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            HStack(spacing: 10) {
+                Image("BrandMark").resizable().scaledToFit().frame(width: 42, height: 42).clipShape(RoundedRectangle(cornerRadius: 10))
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("微/积").font(.title3.weight(.semibold))
+                    Text("细微处，积跬步").font(.caption2).foregroundStyle(.secondary)
                 }
-                if let unit = store.resumeUnit {
-                    Button { open(unit) } label: {
-                        HStack { VStack(alignment: .leading, spacing: 8) {
-                            Text("接着上次的思路").font(.caption)
-                            Text(unit.title).font(.title3.weight(.semibold))
-                        }; Spacer(); Image(systemName: "arrow.right") }
-                        .padding(24).foregroundStyle(.white).background(Color(red: 0.17, green: 0.30, blue: 0.49), in: RoundedRectangle(cornerRadius: 24))
+            }.padding(.top, 4)
+            Text("学习路线").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+            VStack(spacing: 6) {
+                ForEach(Array(store.modules.enumerated()), id: \.element.id) { index, item in
+                    Button { selectedModule = item.id } label: {
+                        HStack(alignment: .top, spacing: 9) {
+                            Text(String(format: "%02d", index + 1)).font(.caption.monospacedDigit()).foregroundStyle(.secondary).padding(.top, 2)
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(item.shortTitle).font(.subheadline.weight(.semibold))
+                                Text("\(done(item)) / \(item.units.count) 节").font(.caption2).foregroundStyle(.secondary)
+                                ProgressView(value: Double(done(item)), total: Double(item.units.count))
+                            }
+                        }.frame(maxWidth: .infinity, alignment: .leading).padding(10)
+                            .background(item.id == module.id ? Theme.accent.opacity(0.1) : .clear, in: RoundedRectangle(cornerRadius: 12))
                     }.buttonStyle(.plain)
                 }
-                Label("展开屏幕，左边学习，右边推演。", systemImage: "rectangle.split.2x1")
-                    .font(.subheadline).foregroundStyle(.secondary)
-            }.padding(32).frame(maxWidth: 780, alignment: .leading).frame(maxWidth: .infinity)
-        }.background(Theme.background).navigationTitle("今天，从一点开始")
+            }
+            Spacer(minLength: 8)
+            VStack(alignment: .leading, spacing: 6) {
+                Label("离线可用", systemImage: "checkmark.circle").font(.caption)
+                Text("78 节课程 · 359 道练习").font(.caption2).foregroundStyle(.secondary)
+            }
+        }.padding(14).frame(maxHeight: .infinity).background(Theme.card)
     }
-    func metric(_ value: String, _ label: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) { Text(value).font(.title2.monospacedDigit().weight(.semibold)); Text(label).font(.caption).foregroundStyle(.secondary) }
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).background(Theme.card, in: RoundedRectangle(cornerRadius: 18))
-    }
+    func done(_ module: CourseModule) -> Int { module.units.filter { store.progress.completed[$0.id] != nil }.count }
+    func open(_ unit: CourseUnit) { destination = LessonDestination(unit: unit) }
 }
 
 struct ModuleView: View {
     let module: CourseModule
     let store: LearningStore
+    let availableWidth: CGFloat
     let open: (CourseUnit) -> Void
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    var completed: Int { module.units.filter { store.progress.completed[$0.id] != nil }.count }
     var body: some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 14) {
-                    Image(systemName: module.symbol).font(.largeTitle).foregroundStyle(Theme.accent)
-                    Text(module.subtitle ?? "").font(.title2).fontDesign(.serif)
-                    let done = module.units.filter { store.progress.completed[$0.id] != nil }.count
-                    ProgressView(value: Double(done), total: Double(module.units.count))
-                    Text("已完成 \(done) / \(module.units.count) 节").font(.caption).foregroundStyle(.secondary)
-                }.padding(.vertical, 12)
-            }
-            ForEach(module.lessons) { lesson in
-                Section(lesson.title) {
-                    ForEach(lesson.units) { unit in
-                        Button { open(unit) } label: {
-                            HStack(spacing: 14) {
-                                Image(systemName: store.progress.completed[unit.id] != nil ? "checkmark.circle.fill" : store.isUnlocked(unit) ? "play.circle" : "eye")
-                                    .font(.title3).foregroundStyle(Theme.accent)
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(unit.title).foregroundStyle(.primary)
-                                    Text("\(unit.exercises.count) 道练习 · \(store.isUnlocked(unit) ? "约 5 分钟" : "可先预览")")
-                                        .font(.caption).foregroundStyle(.secondary)
-                                }; Spacer(); Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
-                            }.padding(.vertical, 7)
-                        }.accessibilityIdentifier(unit.id)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(module.shortTitle).font(.title2.weight(.semibold))
+                        Text(module.subtitle ?? "").font(.subheadline).foregroundStyle(.secondary)
+                    }
+                    Spacer(minLength: 8)
+                    Text("\(completed) / \(module.units.count)").font(.caption.monospacedDigit().weight(.semibold))
+                        .padding(.horizontal, 10).padding(.vertical, 7).background(Theme.card, in: Capsule())
+                }
+                if let unit = store.resumeUnit {
+                    Button { open(unit) } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "play.fill").font(.headline)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("继续学习").font(.caption).opacity(0.8)
+                                Text(unit.title).font(.headline)
+                            }
+                            Spacer(); Image(systemName: "arrow.right")
+                        }.padding(15).foregroundStyle(.white)
+                            .background(Color(red: 0.17, green: 0.30, blue: 0.49), in: RoundedRectangle(cornerRadius: 16))
+                    }.buttonStyle(.plain).accessibilityIdentifier("resumeLesson")
+                }
+                HStack(spacing: 16) {
+                    Label("\(store.completedCount) 节已完成", systemImage: "checkmark.circle")
+                    Label("\(store.progress.mistakes.count) 道待巩固", systemImage: "arrow.counterclockwise")
+                    Spacer(minLength: 0)
+                }.font(.caption).foregroundStyle(.secondary)
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 18, alignment: .top), count: availableWidth >= 940 && !dynamicTypeSize.isAccessibilitySize ? 2 : 1), alignment: .leading, spacing: 18) {
+                    ForEach(module.lessons) { lesson in
+                        lessonGroup(lesson)
                     }
                 }
-            }
-        }.navigationTitle(module.shortTitle)
+            }.padding(18)
+        }.id(module.id).background(Theme.background)
+    }
+    func lessonGroup(_ lesson: CourseLesson) -> some View {
+        VStack(alignment: .leading, spacing: 9) {
+                        Text(lesson.title).font(.subheadline.weight(.semibold))
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: dynamicTypeSize.isAccessibilitySize ? 300 : 178), spacing: 10)], spacing: 10) {
+                            ForEach(lesson.units) { unit in
+                                let finished = store.progress.completed[unit.id] != nil
+                                let unlocked = store.isUnlocked(unit)
+                                Button { open(unit) } label: {
+                                    HStack(alignment: .top, spacing: 10) {
+                                        Image(systemName: finished ? "checkmark.circle.fill" : unlocked ? "play.circle" : "lock")
+                                            .font(.title3).foregroundStyle(finished || unlocked ? Theme.accent : .secondary)
+                                        VStack(alignment: .leading, spacing: 7) {
+                                            Text(unit.title).font(.subheadline.weight(.medium)).foregroundStyle(.primary).multilineTextAlignment(.leading)
+                                            Text("\(unit.exercises.count) 道练习 · \(finished ? "已完成" : unlocked ? "约 5 分钟" : "预览")")
+                                                .font(.caption2).foregroundStyle(.secondary)
+                                        }
+                                        Spacer(minLength: 0)
+                                    }.padding(12).frame(maxWidth: .infinity, minHeight: 76, alignment: .topLeading)
+                                        .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
+                                }.buttonStyle(.plain).accessibilityIdentifier(unit.id)
+                            }
+                        }
+        }.frame(maxHeight: .infinity, alignment: .top)
     }
 }
 
@@ -187,10 +215,15 @@ struct ProgressScreen: View {
 struct SettingsScreen: View {
     let store: LearningStore
     @State private var reset = false
+    var version: String {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "2"
+        return "\(version) (\(build))"
+    }
     var body: some View {
         List {
             Section("微/积 · 细微处，积跬步") {
-                LabeledContent("版本", value: "1.0.0")
+                LabeledContent("版本", value: version)
                 LabeledContent("开发者", value: "Zhu Hong")
                 Link("访问官网", destination: URL(string: "https://zhuhong.me/weiji/")!)
                 Link("联系支持 · zivzhu@gmail.com", destination: URL(string: "mailto:zivzhu@gmail.com?subject=Weiji%20Support")!)

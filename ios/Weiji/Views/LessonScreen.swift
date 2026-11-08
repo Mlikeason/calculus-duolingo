@@ -6,7 +6,7 @@ struct LessonScreen: View {
     let review: Bool
     @State private var notebook: Notebook
     @State private var compactPage = 0
-    @State private var workspacePage = 0
+    @State private var workspacePage = 2
     @State private var webError: String?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -22,17 +22,24 @@ struct LessonScreen: View {
         NavigationStack {
             GeometryReader { geometry in
                 let expanded = horizontalSizeClass == .regular && geometry.size.width >= 600 && !dynamicTypeSize.isAccessibilitySize
-                VStack(spacing: 12) {
+                VStack(spacing: 8) {
                     if let session, !preview {
-                        VStack(spacing: 8) {
-                            HStack {
-                                Text(session.isReview ? "错题复习" : "一步一步，建立理解").font(.caption).foregroundStyle(.secondary)
-                                Spacer()
-                                Text("\(min(max(session.position, 0), session.queue.count)) / \(session.queue.count)") .font(.caption.monospacedDigit()).foregroundStyle(.secondary)
-                            }
+                        HStack(spacing: 10) {
+                            Text(session.isReview ? "错题复习" : session.position < 0 ? "先理解，再练习" : "随堂练习").font(.caption.weight(.medium))
                             ProgressView(value: Double(min(max(session.position, 0), session.queue.count)), total: Double(session.queue.count))
-                                .accessibilityLabel("本节进度")
-                        }.padding(.horizontal, 4)
+                                .frame(maxWidth: 150).accessibilityLabel("本节进度")
+                            Text("\(min(max(session.position, 0), session.queue.count)) / \(session.queue.count)").font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                            Spacer(minLength: 0)
+                            if expanded {
+                                Menu {
+                                    Picker("工作区", selection: $workspacePage) {
+                                        Text("图形与草稿").tag(2)
+                                        Text("只看图形").tag(0)
+                                        Text("只看草稿").tag(1)
+                                    }
+                                } label: { Label("布局", systemImage: "rectangle.split.2x2").font(.caption) }
+                            }
+                        }
                     }
                     if !expanded && session?.isFinished != true {
                         Picker("学习工具", selection: $compactPage) {
@@ -42,41 +49,41 @@ struct LessonScreen: View {
                     if session?.isFinished == true && !preview {
                         completion
                     } else {
-                        HStack(spacing: 16) {
-                            if expanded || compactPage == 0 { lessonContent.frame(maxWidth: .infinity, maxHeight: .infinity) }
-                            if expanded {
-                                VStack(spacing: 12) {
-                                    Picker("推演工具", selection: $workspacePage) { Text("图形与概念").tag(0); Text("手写草稿").tag(1) }.pickerStyle(.segmented)
-                                    if workspacePage == 0 { web(mode: "reference") } else { NotebookView(notebook: notebook) }
-                                }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .background(Theme.card, in: RoundedRectangle(cornerRadius: 22)).clipShape(RoundedRectangle(cornerRadius: 22))
-                            } else if compactPage == 1 { web(mode: "reference") }
-                            else if compactPage == 2 { NotebookView(notebook: notebook) }
+                        let showLesson = expanded || compactPage == 0
+                        let showReference = expanded ? workspacePage != 1 : compactPage == 1
+                        let showNotebook = expanded ? workspacePage != 0 : compactPage == 2
+                        StudyWorkspaceLayout(expanded: expanded, together: workspacePage == 2) {
+                            VStack(spacing: 0) {
+                                lessonContent
+                                lessonAction
+                            }.background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
+                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                                .opacity(showLesson ? 1 : 0)
+                                .allowsHitTesting(showLesson).accessibilityHidden(!showLesson)
+                            VStack(spacing: 0) {
+                                HStack {
+                                    Label("图形与概念", systemImage: "chart.xyaxis.line")
+                                    Spacer()
+                                }.font(.caption.weight(.semibold)).foregroundStyle(.secondary).padding(.horizontal, 12).padding(.vertical, 9)
+                                Divider()
+                                web(mode: "reference")
+                            }.background(Theme.card, in: RoundedRectangle(cornerRadius: 14)).clipShape(RoundedRectangle(cornerRadius: 14))
+                                .opacity(showReference ? 1 : 0)
+                                .allowsHitTesting(showReference).accessibilityHidden(!showReference)
+                            NotebookView(notebook: notebook)
+                                .background(Theme.card, in: RoundedRectangle(cornerRadius: 14)).clipShape(RoundedRectangle(cornerRadius: 14))
+                                .opacity(showNotebook ? 1 : 0)
+                                .allowsHitTesting(showNotebook).accessibilityHidden(!showNotebook)
                         }
                     }
                 }
-                .padding(geometry.size.width < 400 ? 12 : 20)
-                .frame(maxWidth: 1400).frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(10)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }.background(Theme.background)
             .navigationTitle(unit.title).navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button { notebook.save(); store.save(); dismiss() } label: { Label("保存并退出", systemImage: "xmark") }.accessibilityIdentifier("closeLesson")
-                }
-            }
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                if session?.isFinished != true {
-                    HStack {
-                        if preview {
-                            Label("先完成前面的课程，即可解锁练习", systemImage: "lock").font(.footnote).foregroundStyle(.secondary)
-                        } else {
-                            Button {
-                                store.advance(unit); compactPage = 0
-                            } label: {
-                                HStack { Text(session?.position == -1 ? "开始练习" : "继续"); Image(systemName: "arrow.right") }.frame(maxWidth: .infinity).padding(.vertical, 9)
-                            }.buttonStyle(.borderedProminent).disabled(!canAdvance).accessibilityIdentifier("nextStep")
-                        }
-                    }.padding(.horizontal, 24).padding(.vertical, 12).frame(maxWidth: 650).frame(maxWidth: .infinity).background(.bar)
                 }
             }
         }
@@ -94,6 +101,26 @@ struct LessonScreen: View {
         return session.answers[index] != nil
     }
     var lessonContent: some View { web(mode: session?.exerciseIndex != nil && !preview ? "exercise" : "intro") }
+    var lessonAction: some View {
+        VStack(spacing: 0) {
+            Divider()
+            if preview {
+                Label("完成前面的课程后解锁练习", systemImage: "lock")
+                    .font(.caption).foregroundStyle(.secondary).padding(10)
+            } else {
+                Button { store.advance(unit); compactPage = 0 } label: {
+                    HStack(spacing: 8) {
+                        Text(session?.position == -1 ? "开始练习" : "继续")
+                        Image(systemName: "arrow.right")
+                    }.font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .foregroundStyle(canAdvance ? Color.white : Color.secondary)
+                        .background(canAdvance ? Theme.accent : Color.secondary.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
+                }.buttonStyle(.plain).disabled(!canAdvance).accessibilityIdentifier("nextStep")
+                    .padding(.horizontal, 10).padding(.vertical, 6)
+            }
+        }
+    }
     func web(mode: String) -> some View {
         let s = session
         let index = s?.exerciseIndex
@@ -134,5 +161,41 @@ struct LessonScreen: View {
                 Button("完整重做本节") { store.start(unit, restart: true) }
             }.padding(32).frame(maxWidth: .infinity)
         }.frame(maxHeight: .infinity).background(Theme.card, in: RoundedRectangle(cornerRadius: 24))
+    }
+}
+
+// All three children remain mounted, with explicit nonzero viewport sizes.
+// This avoids replacing PencilKit / WebKit surfaces when the device folds.
+struct StudyWorkspaceLayout: Layout {
+    let expanded: Bool
+    let together: Bool
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        CGSize(width: proposal.width ?? 600, height: proposal.height ?? 600)
+    }
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        guard subviews.count == 3 else { return }
+        let gap: CGFloat = 8
+        var frames = Array(repeating: bounds, count: 3)
+        if expanded {
+            if together && bounds.width >= 800 {
+                let width = (bounds.width - 2 * gap) / 3
+                frames = (0..<3).map { CGRect(x: bounds.minX + CGFloat($0) * (width + gap), y: bounds.minY, width: width, height: bounds.height) }
+            } else {
+                let lessonWidth = (bounds.width - gap) * 0.46
+                let right = CGRect(x: bounds.minX + lessonWidth + gap, y: bounds.minY, width: bounds.width - lessonWidth - gap, height: bounds.height)
+                frames[0] = CGRect(x: bounds.minX, y: bounds.minY, width: lessonWidth, height: bounds.height)
+                frames[1] = right; frames[2] = right
+                if together {
+                    let studyHeight = (bounds.height - gap) * 0.56
+                    frames[0].size.height = studyHeight
+                    frames[1].size.height = studyHeight
+                    frames[2] = CGRect(x: bounds.minX, y: bounds.minY + studyHeight + gap, width: bounds.width, height: bounds.height - studyHeight - gap)
+                }
+            }
+        }
+        for (index, view) in subviews.enumerated() {
+            let frame = frames[index]
+            view.place(at: frame.origin, anchor: .topLeading, proposal: ProposedViewSize(width: max(1, frame.width), height: max(1, frame.height)))
+        }
     }
 }

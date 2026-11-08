@@ -1,21 +1,25 @@
-import AppKit
-let size = NSSize(width: 1024, height: 1024)
-let image = NSImage(size: size)
-image.lockFocus()
-NSColor(calibratedRed: 0.09, green: 0.17, blue: 0.29, alpha: 1).setFill()
-NSRect(origin: .zero, size: size).fill()
-let grid = NSBezierPath()
-for p in stride(from: 128, through: 896, by: 128) { grid.move(to: NSPoint(x: p, y: 100)); grid.line(to: NSPoint(x: p, y: 924)); grid.move(to: NSPoint(x: 100, y: p)); grid.line(to: NSPoint(x: 924, y: p)) }
-NSColor.white.withAlphaComponent(0.07).setStroke(); grid.lineWidth = 2; grid.stroke()
-let curve = NSBezierPath()
-curve.move(to: NSPoint(x: 235, y: 230)); curve.curve(to: NSPoint(x: 790, y: 790), controlPoint1: NSPoint(x: 630, y: 200), controlPoint2: NSPoint(x: 430, y: 700))
-NSColor(calibratedRed: 0.56, green: 0.78, blue: 0.91, alpha: 1).setStroke(); curve.lineWidth = 24; curve.lineCapStyle = .round; curve.stroke()
-let attributes: [NSAttributedString.Key: Any] = [.font: NSFont(name: "TimesNewRomanPSMT", size: 560) ?? NSFont.systemFont(ofSize: 560), .foregroundColor: NSColor.white]
-("∫" as NSString).draw(at: NSPoint(x: 340, y: 190), withAttributes: attributes)
-NSColor(calibratedRed: 0.95, green: 0.75, blue: 0.40, alpha: 1).setFill()
-NSBezierPath(ovalIn: NSRect(x: 724, y: 713, width: 72, height: 72)).fill()
-image.unlockFocus()
-let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: 1024, pixelsHigh: 1024, bitsPerSample: 8, samplesPerPixel: 3, hasAlpha: false, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
-NSGraphicsContext.saveGraphicsState(); NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
-image.draw(in: NSRect(origin: .zero, size: size)); NSGraphicsContext.restoreGraphicsState()
-try rep.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: "ios/Weiji/Assets.xcassets/AppIcon.appiconset/AppIcon.png"))
+import Foundation
+import CoreGraphics
+import ImageIO
+
+// Preserve the user's artwork, fitting it to an opaque square without distortion.
+let sourceURL = URL(fileURLWithPath: "newicon.png")
+guard let source = CGImageSourceCreateWithURL(sourceURL as CFURL, nil),
+      let image = CGImageSourceCreateImageAtIndex(source, 0, nil),
+      let space = CGColorSpace(name: CGColorSpace.sRGB),
+      let context = CGContext(data: nil, width: 1024, height: 1024, bitsPerComponent: 8, bytesPerRow: 1024 * 4, space: space, bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue) else { fatalError("Cannot read icon artwork") }
+context.setFillColor(CGColor(gray: 1, alpha: 1))
+context.fill(CGRect(x: 0, y: 0, width: 1024, height: 1024))
+context.interpolationQuality = .high
+let scale = 1024.0 / Double(max(image.width, image.height))
+let width = Double(image.width) * scale, height = Double(image.height) * scale
+context.draw(image, in: CGRect(x: (1024 - width) / 2, y: (1024 - height) / 2, width: width, height: height))
+guard let result = context.makeImage() else { fatalError("Cannot render icon") }
+let output = URL(fileURLWithPath: "ios/Weiji/Assets.xcassets/AppIcon.appiconset/AppIcon.png")
+guard let destination = CGImageDestinationCreateWithURL(output as CFURL, "public.png" as CFString, 1, nil) else { fatalError("Cannot save icon") }
+CGImageDestinationAddImage(destination, result, nil)
+guard CGImageDestinationFinalize(destination) else { fatalError("Cannot finalize icon") }
+let brand = URL(fileURLWithPath: "ios/Weiji/Assets.xcassets/BrandMark.imageset", isDirectory: true)
+try FileManager.default.createDirectory(at: brand, withIntermediateDirectories: true)
+try Data(contentsOf: output).write(to: brand.appendingPathComponent("BrandMark.png"))
+try Data(#"{"images":[{"filename":"BrandMark.png","idiom":"universal"}],"info":{"author":"xcode","version":1}}"#.utf8).write(to: brand.appendingPathComponent("Contents.json"))
