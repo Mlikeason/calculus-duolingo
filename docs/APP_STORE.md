@@ -9,8 +9,8 @@
 - 网站源码副本在 `release/website/weiji/`，已同步到 `/Users/hoo/zhuhong-journal/weiji/` 并加入部署白名单。旧 `zhuhong-me` GitHub 仓库中的页面也已保存，但当前主域名由 `finding-m` 提供服务。
 - Xcode 上传尝试返回：App Store Connect 中不存在 Bundle ID `me.zhuhong.weiji` 的 App 记录。**应用尚未上传成功、尚未提交审核、尚未上架**；需要先在正确团队创建记录。用户已确认登录；App 记录创建和上传尚未完成。
 - Build 2 已签名安装并在用户真机正常启动；最新 Swift 单元测试 7 项通过。真机 XCUITest 的手写可见性 / 重启恢复与截图流程均通过；先前完整答题恢复与错题流程也已通过。
-- 截图与对应版本见 `release/screenshots/README.md`。最新真机课程与手写截图已取得；普通 iPhone / iPad 商店截图仍在补齐，不使用旧版布局截图充当新版截图。
-- 草稿空白根因为动态颜色被保存成白色。现已固定黑色笔迹 / 白纸，恢复旧单色笔迹；真机可见绘制、切换工具、旋转与重启测试均通过。最终商店归档、截图和 App Store Connect 流程仍需完成。
+- 新版素材已补齐：iPhone 3 张 1320 × 2868、iPad 2 张 2752 × 2064，均为实际 JPEG 截图、无透明通道，已目视检查。真机手写验证和历史布局截图单独标注，详见 `release/screenshots/README.md`。
+- 草稿空白根因为动态颜色被保存成白色。现已固定黑色笔迹 / 白纸，恢复旧单色笔迹；真机可见绘制、切换工具、旋转与重启测试均通过。最终商店归档和 App Store Connect 流程仍需完成。
 
 ## 基本信息
 
