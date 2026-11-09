@@ -1,33 +1,27 @@
 # 应用截图与版本
 
-全部为实际应用截图，没有合成界面或拉伸。
+全部为实际应用截图，没有合成界面、拉伸或尺寸转换。
 
-## 当前 Build 4 截图状态
+## 当前 Build 4 商店素材（2026-11-09）
 
-Build 3 / 4 移除了应用内品牌、口号和模块副标题；下列 Build 2 图片均已过时，不能用于当前版本商店提交。
+`current/` 下六张 JPEG 已逐张目视检查，并上传到 App Store Connect 1.0.0 的对应尺寸槽位：
 
-`build/Store-build3-iPhone.xcresult` 的 7 项单元测试与截图流程通过，整屏 PNG 已导出到 `build/build3-iphone-attachments/`。首页通过目视检查，但练习页的 WebView 在自动截图中为空，不能作为商店素材。iPad 本轮运行在测试器连接阶段被终止，未生成有效截图。仍需直接取屏并逐张检查。
+| 设备 | 文件 | 尺寸 |
+| --- | --- | --- |
+| iPhone 中等显示屏 | `iphone-medium-01-learning-route.jpg`、`iphone-medium-02-interactive-lesson.jpg` | 1206 × 2622 |
+| iPad 13 英寸 | `ipad-01-learning-route.jpg`、`ipad-02-interactive-lesson.jpg` | 2752 × 2064 |
+| iPhone Duo 展开内屏 | `duo-01-learning-route.jpg`、`duo-02-interactive-workspace.jpg` | 2853 × 2007 |
 
-## Build 2 iPhone 商店截图
+这些图片来自当前 Build 4 源码的专用模拟器，使用 Device Hub 操作和 `simctl io screenshot --type=jpeg` 直接取屏。Duo 使用 `--display=3` 获取内屏。测试数据位于隔离目录，未改动用户的日常学习记录。
 
-`iphone-01-learning-route.jpg`、`iphone-02-interactive-lesson.jpg`、`iphone-03-handwriting-workspace.jpg` 为当前界面，尺寸 1320 × 2868，JPEG、无透明通道。来自通过的 `build/Store-final-iPhone.xcresult`，已经目视检查。
+已经检查新版无应用内品牌和口号、课程内容完整、数学公式与 WebView 图形可见、图片方向和尺寸正确。Duo 练习图展示正确答案反馈、黑色手写笔迹，以及只位于左侧题目栏底部的继续按钮。
 
-## Build 2 iPad 商店截图
+`current/iphone-01-learning-route.png` 为此前通过检查的 Build 3 / 4 同界面首页，1320 × 2868，未用于本次上传。
 
-`ipad-01-learning-route.jpg`、`ipad-02-interactive-lesson.jpg` 为 2752 × 2064 横屏 JPEG、无透明通道。通过 Device Hub 操作专用模拟器，使用 `simctl io screenshot --type=jpeg` 直接获取完整屏幕；已检查方向、全部三栏和按钮位置。
+## 先前截图流程的限制
 
-自动测试 `build/Store-build2-iPad.xcresult` 通过，但 `app.screenshot().image.jpegData` 导出的横屏图片出现方向 / 裁切异常，因此没有采用。截图辅助函数改为系统整屏 PNG；随后一次运行在测试器准备阶段崩溃，最终素材由上述直接取屏完成。
-
-## Build 2 真机验证
-
-- `duo-device-02-interactive-lesson.jpg`：最新练习、两列短选项，以及仅位于题目面板底部的 44 pt 继续按钮。
-- `duo-device-03-handwriting-workspace.jpg`：折叠屏的草稿工具。
-- `duo-device-notebook-restored.jpg`：绘制、切换工具、旋转和重启后，真实笔迹仍可见。
-
-以上 JPEG 来自 `build/Weiji-layout-final-device.xcresult` 的两项通过测试，不含透明通道。测试使用独立的测试目录。截图时间为真机时间，主要用于验证；普通 iPhone / iPad 的新版素材均已补齐。
+`build/Store-build3-iPhone.xcresult` 的 7 项单元测试与截图流程通过，但自动整屏 PNG 中的练习 WebView 为空；这些练习图片没有上传。iPad 同轮测试在测试器连接阶段被终止，也未采用。此前自动横屏 JPEG 曾出现方向 / 裁切异常。本次改用直接取屏并逐张检查，六张图片均完整。
 
 ## 历史截图
 
-`archive-build1/` 为此前的旧版布局与早期草稿验证，不能用于宣传当前 Build 2。保留这些文件用于对照。
-
-`ios/WeijiUITests/StoreScreenshots.swift` 可重拍首页、练习和草稿三张整屏 PNG；iPad 横屏也可使用上述 `simctl` 命令直接获取 JPEG。正式上传前应核对所选 App Store 尺寸槽位及截图版本；不能把旧图拉伸成所需尺寸。
+本目录根部的 iPhone、iPad 和 Duo 图片来自 Build 2，含已移除的品牌或文案，不用于当前版本商店页面。`archive-build1/` 是更早布局。保留这些图片用于审查对照。
