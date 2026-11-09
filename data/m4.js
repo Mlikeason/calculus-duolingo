@@ -3,7 +3,7 @@
 export const m4 = {
   id: 'm4',
   title: 'M4 · 积分',
-  subtitle: '把碎片加回来',
+  subtitle: '不定积分、定积分与应用',
   lessons: [
     // ───────────────────────────────────────────────────────────────
     // L1 不定积分（反导数）
@@ -92,7 +92,7 @@ export const m4 = {
             { type: 'choice', prompt: '$\\int \\dfrac{1}{x}\\,dx$ 等于？',
               options: ['$\\dfrac{x^0}{0} + C$（不存在）', '$\\ln x + C$', '$\\ln|x| + C$', '$-\\dfrac{1}{x^2} + C$'], answer: 2,
               explain: '这是 $n = -1$ 的例外。要加绝对值：$\\ln|x| + C$。' },
-            { type: 'fill', prompt: '$\\int \\sqrt{x}\\,dx = \\int x^{1/2}\\,dx = \\dfrac{2}{3}x^{$ ___ $} + C$', answer: ['3/2', '1.5'],
+            { type: 'fill', prompt: '$\\int \\sqrt{x}\\,dx = \\dfrac{2}{3}x^a + C$，其中 $a = $ ___', answer: ['3/2', '1.5'],
               explain: '$1/2 + 1 = 3/2$，$\\dfrac{x^{3/2}}{3/2} = \\dfrac{2}{3}x^{3/2}$。' }
           ]
         },
@@ -134,8 +134,8 @@ export const m4 = {
             { type: 'fill', prompt: '$\\int (x^2 + 1)\\,dx = \\dfrac{x^3}{3} + $ ___ $+ C$', answer: 'x',
               explain: '$\\int x^2\\,dx + \\int 1\\,dx = \\dfrac{x^3}{3} + x + C$。' },
             { type: 'choice', prompt: '$\\int 5x^4\\,dx$ 等于？',
-              options: ['$20x^3 + C$', '$x^5 + C$', '$\\dfrac{5x^5}{5} + C$', '$5x^5 + C$'], answer: 1,
-              explain: '$5 \\cdot \\dfrac{x^5}{5} = x^5$。选项 B 和 C 一样。' },
+              options: ['$20x^3 + C$', '$x^5 + C$', '$\\dfrac{x^5}{5} + C$', '$5x^5 + C$'], answer: 1,
+              explain: '$5 \\cdot \\dfrac{x^5}{5} = x^5$，所以原函数为 $x^5 + C$。' },
             { type: 'fill', prompt: '$\\int (3\\cos x - 2\\sin x)\\,dx = 3\\sin x + $ ___ $\\cos x + C$（填带符号的系数）', answer: '2',
               explain: '$\\int -2\\sin x\\,dx = -2 \\cdot (-\\cos x) = 2\\cos x$。' },
             { type: 'truefalse', prompt: '$\\int f(x) \\cdot g(x)\\,dx = \\int f(x)\\,dx \\cdot \\int g(x)\\,dx$。', answer: false,
@@ -184,13 +184,13 @@ export const m4 = {
           id: 'm4-l3-u2',
           title: '换元练习：常见套路',
           intro: {
-            hook: '换元法没有固定流程，但有几种「一眼能看出来」的模式。练多了就成条件反射。',
+            hook: '换元时，寻找同时出现的内层函数及其导数。下面练习几种常见形式。',
             intuition: '<strong>模式 1</strong>：$\\int f(ax + b)\\,dx = \\dfrac{1}{a} F(ax + b) + C$。线性内层，直接除以内层系数。<br><strong>模式 2</strong>：被积函数里有 $g(x)$ 和 $g\'(x)$，令 $u = g(x)$。<br><strong>模式 3</strong>：分母是 $1 + x^2$ → 想 $\\arctan$；分母是 $\\sqrt{1 - x^2}$ → 想 $\\arcsin$。',
             formula: { latex: '\\int f(ax + b)\\,dx = \\frac{1}{a} F(ax + b) + C', caption: '线性换元最常用，直接除以 $a$。' },
             takeaway: '线性内层除以系数，复杂内层找导数凑。'
           },
           exercises: [
-            { type: 'fill', prompt: '$\\int e^{5x}\\,dx = \\dfrac{1}{ \\text{___} }\\, e^{5x} + C$', answer: '5',
+            { type: 'fill', prompt: '$\\int e^{5x}\\,dx = \\dfrac{1}{a}e^{5x} + C$，其中 $a = $ ___', answer: '5',
               explain: '线性内层 $5x$，除以系数 5。' },
             { type: 'choice', prompt: '$\\int \\sin(3x + 1)\\,dx$ 等于？',
               options: ['$-\\cos(3x + 1) + C$', '$-\\dfrac{1}{3}\\cos(3x + 1) + C$', '$\\dfrac{1}{3}\\cos(3x + 1) + C$', '$3\\cos(3x + 1) + C$'], answer: 1,
@@ -198,7 +198,7 @@ export const m4 = {
             { type: 'choice', prompt: '$\\int x \\cdot e^{x^2}\\,dx$ 等于？',
               options: ['$e^{x^2} + C$', '$\\dfrac{1}{2}e^{x^2} + C$', '$2x \\cdot e^{x^2} + C$', '$x^2 e^{x^2} + C$'], answer: 1,
               explain: '令 $u = x^2$，$du = 2x\\,dx$，所以 $x\\,dx = \\dfrac{1}{2}du$。$\\dfrac{1}{2}\\int e^u\\,du = \\dfrac{1}{2}e^{x^2} + C$。' },
-            { type: 'fill', prompt: '$\\int (2x + 3)^4\\,dx = \\dfrac{(2x+3)^5}{\\text{___}} + C$', answer: '10',
+            { type: 'fill', prompt: '$\\int (2x + 3)^4\\,dx = \\dfrac{(2x+3)^5}{a} + C$，其中 $a = $ ___', answer: '10',
               explain: '幂法则给 $\\dfrac{u^5}{5}$，线性内层再除以 2，共 $5 \\times 2 = 10$。' },
             { type: 'choice', prompt: '$\\int \\dfrac{1}{1 + x^2}\\,dx$ 等于？',
               options: ['$\\ln(1 + x^2) + C$', '$\\arctan x + C$', '$\\arcsin x + C$', '$\\dfrac{-1}{x} + C$'], answer: 1,
@@ -287,7 +287,7 @@ export const m4 = {
             { type: 'truefalse', prompt: '定积分的结果是一个函数。', answer: false,
               explain: '定积分算出来是一个<em>数</em>。不定积分才是函数族。' },
             { type: 'choice', prompt: '定积分 $\\int_0^1 f(x)\\,dx$ 中，0 和 1 分别叫什么？',
-              options: ['被积函数和积分变量', '下限和上限', '起点和终点', 'B 和 C 都对'], answer: 3,
+              options: ['被积函数和积分变量', '下限和上限', '导数和原函数', '最大值和最小值'], answer: 1,
               explain: '下限/上限，也叫积分的起点/终点。' },
             { type: 'truefalse', prompt: '定积分的结果要加 $+C$。', answer: false,
               explain: '不需要。$C$ 是不定积分的事。定积分已经有上下限，结果是唯一的数。' },

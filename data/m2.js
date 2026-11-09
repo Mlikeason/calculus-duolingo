@@ -3,7 +3,7 @@
 export const m2 = {
   id: 'm2',
   title: 'M2 · 极限与连续',
-  subtitle: '微积分的第一块基石',
+  subtitle: '极限、无穷小与连续性',
   lessons: [
     // ───────────────────────────────────────────────────────────────
     // L1 极限直观
@@ -233,7 +233,7 @@ export const m2 = {
           id: 'm2-l3-u3',
           title: '替换法：把题目变成「标准形」',
           intro: {
-            hook: '记不住每一种变形？没关系。只要把题目「凑」回 $\\dfrac{\\sin \\square}{\\square}$（□ → 0）或 $(1 + \\square)^{1/\\square}$（□ → 0）这两个标准形，就解决了。',
+            hook: '将表达式化为 $\\dfrac{\\sin \\square}{\\square}$（□ → 0）或 $(1 + \\square)^{1/\\square}$（□ → 0），即可使用对应的标准极限。',
             intuition: '凑标准形的核心：上下出现的「东西」要长得一样。比如 $\\dfrac{\\sin 3x}{2x}$，让 $\\square = 3x$，则 $\\sin 3x / (3x) \\to 1$，多出来的 $3/2$ 拎出来当系数。',
             formula: { latex: '\\lim_{\\square \\to 0} \\frac{\\sin \\square}{\\square} = 1, \\quad \\lim_{\\square \\to 0} (1 + \\square)^{1/\\square} = e', caption: '□ 代表任意趋于 0 的表达式。' },
             takeaway: '凑标准形 = 凑「上下一样的东西 → 0」。'
@@ -376,7 +376,7 @@ export const m2 = {
             { type: 'truefalse', prompt: '若 $\\displaystyle \\lim_{x \\to 1} f(x) = 5$ 且 $f(1) = 5$，则 $f$ 在 $x = 1$ 处连续。', answer: true,
               explain: '极限与函数值都存在且相等，正好满足定义。' },
             { type: 'choice', prompt: '若 $\\displaystyle \\lim_{x \\to 1} f(x) = 3$，但 $f(1) = 5$，则 $f$ 在 $x = 1$ 处？',
-              options: ['连续', '不连续', '可去间断', 'B 和 C 都对'], answer: 3,
+              options: ['连续', '跳跃间断', '无穷间断', '可去间断，因此不连续'], answer: 3,
               explain: '不连续（极限 ≠ 函数值），具体是「可去间断」——只要把 $f(1)$ 改成 3 就能补好。' },
             { type: 'choice', prompt: '若 $\\displaystyle \\lim_{x \\to 1} f(x)$ 不存在，那 $f$ 在 $x = 1$ 处？',
               options: ['一定连续', '一定不连续', '看 $f(1)$ 而定', '看函数类型'], answer: 1,
@@ -451,7 +451,7 @@ export const m2 = {
             { type: 'choice', prompt: '$f(x) = \\dfrac{x}{x^2 - 1}$ 的间断点是？',
               options: ['$x = 0$', '$x = \\pm 1$', '$x = 1$', '无间断点'], answer: 1,
               explain: '分母 $x^2 - 1 = (x-1)(x+1)$，$x = \\pm 1$ 时为 0。' },
-            { type: 'fill', prompt: '$f(x) = \\ln(x - 2)$ 在 $x = $ ___ 处不连续（写两个端点的小的那个），实际上要 $x > 2$ 才连续。', answer: '2',
+            { type: 'fill', prompt: '$f(x) = \\ln(x - 2)$ 在 $x = $ ___ 是定义域的边界；该函数在 $x > 2$ 上连续。', answer: '2',
               explain: '$\\ln$ 要求自变量 > 0，所以 $x - 2 > 0$ 即 $x > 2$。x=2 是定义域端点，左侧无定义。' },
             { type: 'choice', prompt: '$f(x) = \\sqrt{4 - x^2}$ 的连续区间是？',
               options: ['$[-2, 2]$', '$(-2, 2)$', '全体实数', '$x \\ne \\pm 2$'], answer: 0,

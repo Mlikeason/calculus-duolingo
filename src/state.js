@@ -3,7 +3,11 @@ const KEY = 'calculus-duolingo-progress-v1';
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
-    return raw ? JSON.parse(raw) : { completed: {} };
+    const parsed = raw ? JSON.parse(raw) : null;
+    const completed = parsed?.completed;
+    if (!completed || typeof completed !== 'object' || Array.isArray(completed)) return { completed: {} };
+    return { completed: Object.fromEntries(Object.entries(completed)
+      .filter(([id, at]) => /^m\d+-l\d+-u\d+$/.test(id) && Number.isFinite(at) && at > 0)) };
   } catch {
     return { completed: {} };
   }

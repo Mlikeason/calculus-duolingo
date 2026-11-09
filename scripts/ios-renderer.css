@@ -1,0 +1,32 @@
+:root { color-scheme: light dark; --paper: #fff; --ink: #172039; --muted: #647086; --line: #e1e6ee; --soft: #eef3fa; --accent: #315887; }
+html, body { margin: 0; background: var(--paper); color: var(--ink); }
+body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; line-height: 1.65; -webkit-text-size-adjust: 100%; }
+#content { margin: 0; padding: 16px 16px 24px; overflow-wrap: anywhere; }
+h1 { font-family: 'Songti SC', Georgia, serif; font-size: 1.35rem; line-height: 1.45; font-weight: 700; margin: 8px 0 16px; }
+.question { font-family: inherit; font-size: 1.12rem; font-weight: 600; }
+p { margin: 12px 0; } strong { font-weight: 650; }
+.eyebrow { font-size: .72rem; font-weight: 650; color: var(--muted); letter-spacing: .12em; }
+.visual { margin: 12px 0; padding: 10px 8px; background: #fff; color: #172039; border-radius: 12px; }
+.formula, .takeaway { background: var(--soft); padding: 12px; border-radius: 12px; margin-top: 14px; }
+.caption { color: var(--muted); font-size: .85rem; }
+.katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+.choices { display: grid; gap: 8px; }
+@media (min-width: 250px) { .choices.short { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+button, input { font: inherit; }
+.option { text-align: left; padding: 11px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); min-height: 48px; width: 100%; }
+.option:active { background: var(--soft); }
+.correct { background: #e4f3e9; color: #175733; border-color: #358554; }
+.incorrect { background: #fff0e9; color: #853b20; border-color: #d88055; }
+.feedback { padding: 14px; margin: 16px 0 0; border-radius: 12px; }
+.feedback p { margin: 12px 0 0; }
+form { display: grid; gap: 14px; }
+form label { color: var(--muted); font-size: .85rem; }
+input[type=text] { width: 100%; padding: 16px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); }
+.submit { padding: 14px; background: var(--accent); color: white; border-radius: 14px; min-height: 50px; }
+.submit:disabled { opacity: .45; }
+button:focus-visible, input:focus-visible { outline: 3px solid #6a9cdb; outline-offset: 3px; }
+input[type=range] { min-height: 32px; }
+@media (prefers-color-scheme: dark) {
+  :root { --paper: #1c2130; --ink: #edf0f7; --muted: #a4b1c8; --line: #3b4355; --soft: #27334b; --accent: #476fa5; }
+  .correct { background: #163c2a; color: #b7edc7; } .incorrect { background: #4b2b22; color: #ffcfba; }
+}

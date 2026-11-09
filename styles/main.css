@@ -262,3 +262,8 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .shake { animation: shake 350ms ease; }
 .pop { animation: pop 250ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+.katex-display { overflow-x: auto; overflow-y: hidden; padding-block: 0.25em; }
