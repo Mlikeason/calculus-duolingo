@@ -3,7 +3,7 @@
 export const m5 = {
   id: 'm5',
   title: 'M5 · 微分方程',
-  subtitle: '让变化自己讲故事',
+  subtitle: '微分方程的解法与模型',
   lessons: [
     // ───────────────────────────────────────────────────────────────
     // L1 什么是微分方程
@@ -126,7 +126,7 @@ export const m5 = {
           intro: {
             hook: '来练几道完整的分离变量题，从分离到积分到解出 $y$。',
             intuition: '<strong>步骤</strong>：① 把 $y\'$ 写成 $dy/dx$。② 移项使左边只有 $y$ 和 $dy$，右边只有 $x$ 和 $dx$。③ 两边积分。④ 解出 $y$（如果能的话）。⑤ 有初始条件就代入求 $C$。',
-            takeaway: '熟练后分离变量几乎是条件反射。'
+            takeaway: '分离变量 → 两边积分 → 解出函数，并检查初始条件。'
           },
           exercises: [
             { type: 'choice', prompt: '$y\' = 2y$，通解是？',
@@ -364,7 +364,7 @@ export const m5 = {
             visual: { type: 'plotter', f: 'Math.cos(2*x)', xMin: 0, xMax: 6.28, yMin: -1.5, yMax: 1.5, showPoint: true, initialX: 0 },
             intuition: '上图 $x(t) = \\cos 2t$ 就是一个简谐运动。$\\omega = 2$ 是<em>角频率</em>（决定振多快），振幅 1（拉了多远），永远不停——因为没有阻力。',
             formula: { latex: 'x\'\' + \\omega^2 x = 0 \\implies x = A\\cos(\\omega t + \\varphi)', caption: '$A$ 是振幅，$\\omega$ 是角频率，$\\varphi$ 是初相位。周期 $T = 2\\pi / \\omega$。' },
-            takeaway: '$x\'\' = -\\omega^2 x$ → 简谐振动，sin/cos 是它的母语。'
+            takeaway: '$x\'\' = -\\omega^2 x$ 的解可用正弦和余弦函数表示。'
           },
           exercises: [
             { type: 'choice', prompt: '弹簧常数 $k = 8$，质量 $m = 2$。角频率 $\\omega = $？',
@@ -412,9 +412,9 @@ export const m5 = {
           id: 'm5-l6-u3',
           title: '回顾：微积分的全景',
           intro: {
-            hook: '从「函数是一台机器」到「微分方程让函数自己讲故事」——你已经走完了微积分的核心旅程。',
-            intuition: '<strong>导数</strong>把整体拆成瞬间（$\\Delta y / \\Delta x \\to dy/dx$），<strong>积分</strong>把瞬间加回整体（$\\sum f \\cdot \\Delta x \\to \\int f\\,dx$）。<strong>微积分基本定理</strong>说它们互为逆运算。<strong>微分方程</strong>用这个语言描述自然：人口增长、行星运动、声波传播……数学是宇宙的母语。',
-            takeaway: '微分拆碎，积分拼回。这门语言，你已经会说了。'
+            hook: '本节复习导数、积分和微分方程之间的联系。',
+            intuition: '<strong>导数</strong>描述瞬时变化率（$\\Delta y / \\Delta x \\to dy/dx$），<strong>积分</strong>描述累积量（$\\sum f \\cdot \\Delta x \\to \\int f\\,dx$）。<strong>微积分基本定理</strong>建立二者的联系。<strong>微分方程</strong>描述函数与导数之间的关系，可用于人口增长、运动和振动模型。',
+            takeaway: '导数描述变化率，积分描述累积量，微分方程联系函数与导数。'
           },
           exercises: [
             { type: 'choice', prompt: '导数描述的是什么？',

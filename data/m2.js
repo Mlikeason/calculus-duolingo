@@ -3,7 +3,7 @@
 export const m2 = {
   id: 'm2',
   title: 'M2 · 极限与连续',
-  subtitle: '微积分的第一块基石',
+  subtitle: '极限、无穷小与连续性',
   lessons: [
     // ───────────────────────────────────────────────────────────────
     // L1 极限直观
@@ -233,7 +233,7 @@ export const m2 = {
           id: 'm2-l3-u3',
           title: '替换法：把题目变成「标准形」',
           intro: {
-            hook: '记不住每一种变形？没关系。只要把题目「凑」回 $\\dfrac{\\sin \\square}{\\square}$（□ → 0）或 $(1 + \\square)^{1/\\square}$（□ → 0）这两个标准形，就解决了。',
+            hook: '将表达式化为 $\\dfrac{\\sin \\square}{\\square}$（□ → 0）或 $(1 + \\square)^{1/\\square}$（□ → 0），即可使用对应的标准极限。',
             intuition: '凑标准形的核心：上下出现的「东西」要长得一样。比如 $\\dfrac{\\sin 3x}{2x}$，让 $\\square = 3x$，则 $\\sin 3x / (3x) \\to 1$，多出来的 $3/2$ 拎出来当系数。',
             formula: { latex: '\\lim_{\\square \\to 0} \\frac{\\sin \\square}{\\square} = 1, \\quad \\lim_{\\square \\to 0} (1 + \\square)^{1/\\square} = e', caption: '□ 代表任意趋于 0 的表达式。' },
             takeaway: '凑标准形 = 凑「上下一样的东西 → 0」。'

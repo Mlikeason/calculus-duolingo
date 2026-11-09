@@ -25,7 +25,7 @@ struct LessonScreen: View {
                 VStack(spacing: 8) {
                     if let session, !preview {
                         HStack(spacing: 10) {
-                            Text(session.isReview ? "错题复习" : session.position < 0 ? "先理解，再练习" : "随堂练习").font(.caption.weight(.medium))
+                            Text(session.isReview ? "错题复习" : session.position < 0 ? "课程讲解" : "随堂练习").font(.caption.weight(.medium))
                             ProgressView(value: Double(min(max(session.position, 0), session.queue.count)), total: Double(session.queue.count))
                                 .frame(maxWidth: 150).accessibilityLabel("本节进度")
                             Text("\(min(max(session.position, 0), session.queue.count)) / \(session.queue.count)").font(.caption.monospacedDigit()).foregroundStyle(.secondary)
@@ -151,9 +151,8 @@ struct LessonScreen: View {
         ScrollView {
             VStack(spacing: 24) {
                 Image(systemName: "checkmark.seal.fill").font(.system(size: 64)).foregroundStyle(Theme.accent)
-                Text("又向前走了一小步。") .font(.title).fontDesign(.serif).multilineTextAlignment(.center)
+                Text("练习完成") .font(.title).multilineTextAlignment(.center)
                 if let s = session { Text("本次答对 \(s.correctCount) / \(s.queue.count) 道") .font(.title3).foregroundStyle(.secondary) }
-                Text("理解不必一蹴而就，每次回看都会更清晰。") .foregroundStyle(.secondary).multilineTextAlignment(.center)
                 Button("返回学习路线") { dismiss() }.buttonStyle(.borderedProminent).controlSize(.large)
                 if store.progress.mistakes.contains(where: { $0.hasPrefix(unit.id + ":") }) {
                     Button("巩固本节错题") { store.start(unit, review: true, restart: true) }.buttonStyle(.bordered).controlSize(.large)

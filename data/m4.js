@@ -3,7 +3,7 @@
 export const m4 = {
   id: 'm4',
   title: 'M4 · 积分',
-  subtitle: '把碎片加回来',
+  subtitle: '不定积分、定积分与应用',
   lessons: [
     // ───────────────────────────────────────────────────────────────
     // L1 不定积分（反导数）
@@ -184,7 +184,7 @@ export const m4 = {
           id: 'm4-l3-u2',
           title: '换元练习：常见套路',
           intro: {
-            hook: '换元法没有固定流程，但有几种「一眼能看出来」的模式。练多了就成条件反射。',
+            hook: '换元时，寻找同时出现的内层函数及其导数。下面练习几种常见形式。',
             intuition: '<strong>模式 1</strong>：$\\int f(ax + b)\\,dx = \\dfrac{1}{a} F(ax + b) + C$。线性内层，直接除以内层系数。<br><strong>模式 2</strong>：被积函数里有 $g(x)$ 和 $g\'(x)$，令 $u = g(x)$。<br><strong>模式 3</strong>：分母是 $1 + x^2$ → 想 $\\arctan$；分母是 $\\sqrt{1 - x^2}$ → 想 $\\arcsin$。',
             formula: { latex: '\\int f(ax + b)\\,dx = \\frac{1}{a} F(ax + b) + C', caption: '线性换元最常用，直接除以 $a$。' },
             takeaway: '线性内层除以系数，复杂内层找导数凑。'

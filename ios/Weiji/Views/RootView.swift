@@ -20,12 +20,6 @@ struct RootView: View {
                         if wide { moduleRail.frame(width: geometry.size.width < 800 ? 156 : 184) }
                         VStack(spacing: 0) {
                             if !wide {
-                                HStack(spacing: 10) {
-                                    Image("BrandMark").resizable().scaledToFit().frame(width: 38, height: 38).clipShape(RoundedRectangle(cornerRadius: 9))
-                                    Text("微/积").font(.title2.weight(.semibold))
-                                    Spacer()
-                                    Text("每天一点，理解变化与累积").font(.caption2).foregroundStyle(.secondary)
-                                }.padding(.horizontal, 16).padding(.top, 8).padding(.bottom, 10)
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 8) {
                                         ForEach(store.modules) { item in
@@ -36,7 +30,7 @@ struct RootView: View {
                                             }.buttonStyle(.plain)
                                         }
                                     }.padding(.horizontal, 16)
-                                }.padding(.bottom, 8)
+                                }.padding(.vertical, 8)
                             }
                             ModuleView(module: module, store: store,
                                        availableWidth: geometry.size.width - (wide ? (geometry.size.width < 800 ? 156 : 184) : 0), open: open)
@@ -47,7 +41,7 @@ struct RootView: View {
             NavigationStack {
                 List {
                     if store.progress.mistakes.isEmpty {
-                        ContentUnavailableView("给理解一次巩固", systemImage: "checkmark.seal", description: Text("答错的题会自动收集在这里。重做答对后，它们就会从错题本移出。"))
+                        ContentUnavailableView("暂无错题", systemImage: "checkmark.seal", description: Text("答错的题会自动收录，重做答对后移出。"))
                     } else {
                         Section("按课程复习") {
                             ForEach(store.units.filter { unit in store.progress.mistakes.contains { $0.hasPrefix(unit.id + ":") } }) { unit in
@@ -66,7 +60,7 @@ struct RootView: View {
                 }.navigationTitle("错题本")
             }.tabItem { Label("复习", systemImage: "arrow.counterclockwise") }
             NavigationStack { ProgressScreen(store: store) }
-                .tabItem { Label("足迹", systemImage: "chart.bar.xaxis") }
+                .tabItem { Label("进度", systemImage: "chart.bar.xaxis") }
             NavigationStack { SettingsScreen(store: store) }
                 .tabItem { Label("设置", systemImage: "gearshape") }
         }
@@ -82,13 +76,6 @@ struct RootView: View {
     }
     var moduleRail: some View {
         VStack(alignment: .leading, spacing: 18) {
-            HStack(spacing: 10) {
-                Image("BrandMark").resizable().scaledToFit().frame(width: 42, height: 42).clipShape(RoundedRectangle(cornerRadius: 10))
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("微/积").font(.title3.weight(.semibold))
-                    Text("细微处，积跬步").font(.caption2).foregroundStyle(.secondary)
-                }
-            }.padding(.top, 4)
             Text("学习路线").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
             VStack(spacing: 6) {
                 ForEach(Array(store.modules.enumerated()), id: \.element.id) { index, item in
@@ -127,10 +114,7 @@ struct ModuleView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text(module.shortTitle).font(.title2.weight(.semibold))
-                        Text(module.subtitle ?? "").font(.subheadline).foregroundStyle(.secondary)
-                    }
+                    Text(module.shortTitle).font(.title2.weight(.semibold))
                     Spacer(minLength: 8)
                     Text("\(completed) / \(module.units.count)").font(.caption.monospacedDigit().weight(.semibold))
                         .padding(.horizontal, 10).padding(.vertical, 7).background(Theme.card, in: Capsule())
@@ -191,7 +175,7 @@ struct ProgressScreen: View {
     let store: LearningStore
     var body: some View {
         List {
-            Section("每一步都算数") {
+            Section("学习统计") {
                 LabeledContent("完成课程", value: "\(store.completedCount) / \(store.units.count)")
                 LabeledContent("满分课程", value: "\(store.masteredCount)")
                 LabeledContent("连续学习", value: "\(store.streak) 天")
@@ -208,7 +192,7 @@ struct ProgressScreen: View {
                 }
             }
             Section { Text("完成表示做完本节练习；满分表示在一次完整练习中全部答对。复习只更新错题本，不改变整节最高分。") .font(.footnote).foregroundStyle(.secondary) }
-        }.navigationTitle("学习足迹")
+        }.navigationTitle("学习进度")
     }
 }
 
@@ -217,12 +201,12 @@ struct SettingsScreen: View {
     @State private var reset = false
     var version: String {
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
-        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "2"
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "4"
         return "\(version) (\(build))"
     }
     var body: some View {
         List {
-            Section("微/积 · 细微处，积跬步") {
+            Section("应用信息") {
                 LabeledContent("版本", value: version)
                 LabeledContent("开发者", value: "Zhu Hong")
                 Link("访问官网", destination: URL(string: "https://zhuhong.me/weiji/")!)
@@ -252,14 +236,14 @@ struct SettingsScreen: View {
         return text
     }
     static let privacy = """
-微/积隐私说明
+隐私说明
 更新日期：2026 年 11 月 8 日
 
 开发者：Zhu Hong
 联系邮箱：zivzhu@gmail.com
 官网：https://zhuhong.me
 
-微/积无需注册。应用不含广告、分析追踪或第三方登录，不向开发者或第三方服务器上传你的学习记录。
+应用无需注册，不含广告、分析追踪或第三方登录，不向开发者或第三方服务器上传你的学习记录。
 
 课程内容、数学字体与交互图形随应用安装。学习进度、错题、未完成的练习和手写草稿仅保存在设备上的应用目录中。这些文件可能包含在你启用的 Apple 设备备份内，备份由你的系统设置管理。
 

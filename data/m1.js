@@ -4,7 +4,7 @@
 export const m1 = {
   id: 'm1',
   title: 'M1 · 预备知识',
-  subtitle: '先把工具收拾齐',
+  subtitle: '函数、三角函数与对数',
   lessons: [
     // ───────────────────────────────────────────────────────────────
     // L1 函数与图像
@@ -184,7 +184,7 @@ export const m1 = {
           id: 'm1-l3-u1',
           title: '弧度：用半径量角',
           intro: {
-            hook: '为什么数学家不用度数（90°、180°）而用<strong>弧度</strong>？因为弧度是「自然单位」——它直接拿圆的半径当尺子量弧长，后面的微积分公式会因此干净得像水晶。',
+            hook: '<strong>弧度</strong>用弧长与半径的比值表示角度。微积分中的三角函数公式通常以弧度为单位。',
             visual: { type: 'unit-circle', initial: 1 },
             intuition: '半径为 1 的圆上，从 x 轴开始走过的<em>弧长</em>就是<em>弧度</em>。走半圈是 $\\pi$ 个半径长（即 180°），走完一整圈是 $2\\pi$（360°）。',
             formula: { latex: '180° = \\pi \\text{ rad}, \\quad 360° = 2\\pi \\text{ rad}', caption: '记住这两个换算就够了。' },
@@ -338,9 +338,9 @@ export const m1 = {
         },
         {
           id: 'm1-l4-u3',
-          title: 'e 与自然对数（先认个脸）',
+          title: 'e 与自然对数',
           intro: {
-            hook: '所有底数里，有一个最特殊：$e \\approx 2.71828$。它从「连续复利」「自然增长」中自然冒出来，是微积分世界的母语。以 $e$ 为底的对数叫 <strong>自然对数</strong>，写成 $\\ln x$。',
+            hook: '$e \\approx 2.71828$ 是连续复利和指数增长中常见的常数。以 $e$ 为底的对数叫<strong>自然对数</strong>，写成 $\\ln x$。',
             visual: { type: 'exp-log', base: Math.E },
             intuition: '为什么是 $e$ 而不是 2 或 10？后面学到导数你会看到：$y = e^x$ 满足「自己等于自己导数」，且在 $x=0$ 时值为 1。先把这个名字和这个图像在脑子里挂上号就行。',
             formula: { latex: 'e \\approx 2.71828, \\quad \\ln x = \\log_e x', caption: '物理、金融、生物里所有「自然增长」的语言都用 e。' },

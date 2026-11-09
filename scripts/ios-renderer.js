@@ -32,12 +32,12 @@ function introduction(intro, includeVisual, values) {
   if (includeVisual) visual(intro, values);
   if (intro.intuition) root.append(block('p', intro.intuition));
   if (intro.formula) {
-    const box = block('section', '<div class="eyebrow">数学语言</div>', 'formula');
+    const box = block('section', '<div class="eyebrow">公式</div>', 'formula');
     box.append(block('div', `$$${intro.formula.latex}$$`));
     if (intro.formula.caption) box.append(block('p', intro.formula.caption, 'caption'));
     root.append(box);
   }
-  if (intro.takeaway) root.append(block('aside', `<div class="eyebrow">一句话记住</div>${intro.takeaway}`, 'takeaway'));
+  if (intro.takeaway) root.append(block('aside', `<div class="eyebrow">要点</div>${intro.takeaway}`, 'takeaway'));
 }
 window.renderLesson = p => {
   document.documentElement.style.fontSize = `${17 * p.fontScale}px`;
@@ -47,11 +47,9 @@ window.renderLesson = p => {
   root.replaceChildren();
   window.scrollTo(0, 0);
   if (p.mode === 'reference') {
-    root.append(block('div', '边看边想', 'eyebrow'));
     if (p.intro.visual) visual(p.intro, p.visualValues);
     introduction(p.intro, false, p.visualValues);
   } else if (p.mode === 'intro') {
-    root.append(block('div', '建立直觉', 'eyebrow'));
     root.append(block('h1', p.title));
     introduction(p.intro, true, p.visualValues);
   } else {
@@ -101,7 +99,7 @@ window.renderLesson = p => {
     }
     if (p.submitted) {
       const correct = p.submitted.correct;
-      const feedback = block('section', `<strong>${correct ? '答对了，继续积累。' : '没关系，从这里学会。'}</strong>`, `feedback ${correct ? 'correct' : 'incorrect'}`);
+      const feedback = block('section', `<strong>${correct ? '回答正确' : '回答错误'}</strong>`, `feedback ${correct ? 'correct' : 'incorrect'}`);
       feedback.setAttribute('role', 'status');
       if (!correct && exercise.type === 'fill') {
         const answer = Array.isArray(exercise.answer) ? exercise.answer[0] : exercise.answer;

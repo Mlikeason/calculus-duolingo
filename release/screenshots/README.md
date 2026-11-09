@@ -2,6 +2,12 @@
 
 全部为实际应用截图，没有合成界面或拉伸。
 
+## 当前 Build 4 截图状态
+
+Build 3 / 4 移除了应用内品牌、口号和模块副标题；下列 Build 2 图片均已过时，不能用于当前版本商店提交。
+
+`build/Store-build3-iPhone.xcresult` 的 7 项单元测试与截图流程通过，整屏 PNG 已导出到 `build/build3-iphone-attachments/`。首页通过目视检查，但练习页的 WebView 在自动截图中为空，不能作为商店素材。iPad 本轮运行在测试器连接阶段被终止，未生成有效截图。仍需直接取屏并逐张检查。
+
 ## Build 2 iPhone 商店截图
 
 `iphone-01-learning-route.jpg`、`iphone-02-interactive-lesson.jpg`、`iphone-03-handwriting-workspace.jpg` 为当前界面，尺寸 1320 × 2868，JPEG、无透明通道。来自通过的 `build/Store-final-iPhone.xcresult`，已经目视检查。
