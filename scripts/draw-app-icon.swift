@@ -3,7 +3,7 @@ import CoreGraphics
 import ImageIO
 
 // Preserve the user's artwork, fitting it to an opaque square without distortion.
-let sourceURL = URL(fileURLWithPath: "newicon.png")
+let sourceURL = URL(fileURLWithPath: "imagecal.jpg")
 guard let source = CGImageSourceCreateWithURL(sourceURL as CFURL, nil),
       let image = CGImageSourceCreateImageAtIndex(source, 0, nil),
       let space = CGColorSpace(name: CGColorSpace.sRGB),

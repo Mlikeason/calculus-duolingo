@@ -4,14 +4,15 @@
 
 ## 当前发布状态（2026-11-09）
 
-- 当前源码为 1.0.0 (4)。`build/Weiji-build4.xcarchive` 已签名归档并上传成功。Build 4 包含精简文案、移除应用内品牌，以及用户要求保留的 Mac / Vision Pro 兼容运行选项。
+- 当前源码为 1.0.0 (5)。`build/Weiji-build5.xcarchive` 已签名归档并上传成功。Build 5 将应用图标更换为用户提供的 `imagecal.jpg`（黑底金色银杏叶），保留 Build 4 的精简文案、移除应用内品牌，以及 Mac / Vision Pro 兼容运行选项。
 - 官网、支持和隐私页面已发布到当前 `finding-m` 项目，生产部署 `dpl_JE21BeYjinWf1q9x8N3xAZ3waeNe`；三个页面和原首页 HTTP 200。裸域名正常跳转至 `www.zhuhong.me`。
 - 网站源码副本在 `release/website/weiji/`，已同步到 `/Users/hoo/zhuhong-journal/weiji/` 并加入部署白名单。旧 `zhuhong-me` GitHub 仓库中的页面也已保存，但当前主域名由 `finding-m` 提供服务。
-- App Store Connect 记录：`6832293808`，Bundle ID `me.zhuhong.weiji`。**1.0.0 (4) 已提交，状态为“等待审核”，尚未上架。** 提交时间为 2026-11-09 13:06（GMT+7）。当前有效截图共六张：iPhone、iPad、Duo 各两张，均已完成处理。
+- App Store Connect 记录：`6832293808`，Bundle ID `me.zhuhong.weiji`。**1.0.0 (5) 已重新提交，状态为“等待审核”，尚未上架。** 提交时间为 2026-11-09 23:34（GMT+7）。当前有效截图共六张：iPhone、iPad、Duo 各两张，均已完成处理。
 - Build 4 已签名安装到 iPhone Duo，安装查询确认为 1.0.0 (4)。最新 Swift 单元测试 7 项、Node 测试 5 项通过。此前真机手写可见性 / 重启恢复，以及完整答题与错题流程均通过。
 - 商店说明、审核联系方式、版权授权、4+ 年龄分级和“不收集数据”隐私标签已保存。联系方式仅填在 Apple 表单，未写入源码。
-- 已直接取屏并逐张检查当前 Build 4 的 iPhone、iPad、Duo 画面。自动测试产生的空白 WebView 图片均未上传。Duo JPEG 曾长时间停留在 Apple 处理队列，已改用原始 PNG，版本页面的 JPEG 关联已移除，原文件保留在素材库与仓库。
-- 最终校验通过，Apple 返回“已提交 1 个项目”；审核详情再次确认 iOS App 1.0.0、构建版本 4 均为“等待审核”。提交 ID：`062b8d8b-d0b7-4d54-9055-9fe6cd5fd48a`。已选择审核通过后自动发布。
+- 已直接取屏并逐张检查 Build 4 的 iPhone、iPad、Duo 画面。自动测试产生的空白 WebView 图片均未上传。Duo JPEG 曾长时间停留在 Apple 处理队列，已改用原始 PNG，版本页面的 JPEG 关联已移除，原文件保留在素材库与仓库。
+- Build 5 的 1024 × 1024 PNG 图标无透明通道，已检查归档中的图标和 App Store Connect“包含的素材”大图预览。签名归档、签名验证与上传均通过，Apple 将二进制文件标记为“已验证”。本次只变更图标与构建号，未重复运行功能测试。
+- 已撤回 Build 4 的旧审核，将版本关联改为 Build 5 后重新提交。Apple 返回“已提交 1 个项目”；审核详情确认 iOS App 1.0.0、构建版本 5 均为“等待审核”。新提交 ID：`185ae75b-0820-44c6-aaa4-9f4872741959`。已保留审核通过后自动发布。
 
 ## 基本信息
 
@@ -21,7 +22,7 @@
 | 副标题 | 交互图形、课程练习与手写草稿 |
 | Bundle ID | me.zhuhong.weiji |
 | SKU | weiji-ios-001 |
-| 版本 / Build | 1.0.0 / 4 |
+| 版本 / Build | 1.0.0 / 5 |
 | Apple ID | 6832293808 |
 | 主语言 | 简体中文 |
 | 主分类 | 教育 |
@@ -75,6 +76,6 @@ The local WKWebView renders bundled mathematics and diagrams; navigation, scorin
 
 ## 审核记录
 
-[App Store Connect 审核详情](https://appstoreconnect.apple.com/apps/6832293808/distribution/reviewsubmissions/details/062b8d8b-d0b7-4d54-9055-9fe6cd5fd48a)
+[App Store Connect 审核详情](https://appstoreconnect.apple.com/apps/6832293808/distribution/reviewsubmissions/details/185ae75b-0820-44c6-aaa4-9f4872741959)
 
-提交前确认六张素材预览正常、版本关联 Build 4，并完成“添加以供审核”及“提交以供审核”。当前等待 Apple 审核；免费供应与 Mac / Vision Pro 兼容可用性设置保留。
+提交前确认六张素材预览正常、版本关联 Build 5，并完成“添加以供审核”及“提交以供审核”。当前等待 Apple 审核；免费供应与 Mac / Vision Pro 兼容可用性设置保留。
