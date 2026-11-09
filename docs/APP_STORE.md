@@ -7,10 +7,11 @@
 - 当前源码为 1.0.0 (4)。`build/Weiji-build4.xcarchive` 已签名归档并上传成功。Build 4 包含精简文案、移除应用内品牌，以及用户要求保留的 Mac / Vision Pro 兼容运行选项。
 - 官网、支持和隐私页面已发布到当前 `finding-m` 项目，生产部署 `dpl_JE21BeYjinWf1q9x8N3xAZ3waeNe`；三个页面和原首页 HTTP 200。裸域名正常跳转至 `www.zhuhong.me`。
 - 网站源码副本在 `release/website/weiji/`，已同步到 `/Users/hoo/zhuhong-journal/weiji/` 并加入部署白名单。旧 `zhuhong-me` GitHub 仓库中的页面也已保存，但当前主域名由 `finding-m` 提供服务。
-- App Store Connect 记录已创建：`6832293808`，Bundle ID `me.zhuhong.weiji`。Build 3、4 均已上传成功。**尚未提交审核、尚未上架**；版本页暂关联 Build 3，待替换最终 Build 4 并补齐截图。
+- App Store Connect 记录：`6832293808`，Bundle ID `me.zhuhong.weiji`。**1.0.0 (4) 已提交，状态为“等待审核”，尚未上架。** 提交时间为 2026-11-09 13:06（GMT+7）。当前有效截图共六张：iPhone、iPad、Duo 各两张，均已完成处理。
 - Build 4 已签名安装到 iPhone Duo，安装查询确认为 1.0.0 (4)。最新 Swift 单元测试 7 项、Node 测试 5 项通过。此前真机手写可见性 / 重启恢复，以及完整答题与错题流程均通过。
 - 商店说明、审核联系方式、版权授权、4+ 年龄分级和“不收集数据”隐私标签已保存。联系方式仅填在 Apple 表单，未写入源码。
-- Build 2 截图已过时；当前版 iPhone 截图流程通过，但其中练习 PNG 的 WebView 为空，不能上传。iPad 测试器在建立连接前被系统终止。继续补拍实际完整画面，详见 `release/screenshots/README.md`。
+- 已直接取屏并逐张检查当前 Build 4 的 iPhone、iPad、Duo 画面。自动测试产生的空白 WebView 图片均未上传。Duo JPEG 曾长时间停留在 Apple 处理队列，已改用原始 PNG，版本页面的 JPEG 关联已移除，原文件保留在素材库与仓库。
+- 最终校验通过，Apple 返回“已提交 1 个项目”；审核详情再次确认 iOS App 1.0.0、构建版本 4 均为“等待审核”。提交 ID：`062b8d8b-d0b7-4d54-9055-9fe6cd5fd48a`。已选择审核通过后自动发布。
 
 ## 基本信息
 
@@ -72,8 +73,8 @@ The local WKWebView renders bundled mathematics and diagrams; navigation, scorin
 - 加密：应用使用系统提供的功能，不实现非豁免加密；Info.plist 已设置 `ITSAppUsesNonExemptEncryption = NO`。
 - 价格与地区：免费，175 个地区供应。保留 Apple 芯片 Mac 和 Apple Vision Pro 兼容可用性；当地供应仍受 Apple 的区域要求约束。
 
-## 提交顺序
+## 审核记录
 
-1. 补拍并上传精简文案后的实际 iPhone / iPad / Duo 截图，不拉伸其他尺寸的截图。
-2. 选中处理后的 Build 4，并核对版本页的构建编号。
-3. 提交审核；以 App Store Connect 的状态作为最终结果。已获得用户提交授权，无需重复询问。
+[App Store Connect 审核详情](https://appstoreconnect.apple.com/apps/6832293808/distribution/reviewsubmissions/details/062b8d8b-d0b7-4d54-9055-9fe6cd5fd48a)
+
+提交前确认六张素材预览正常、版本关联 Build 4，并完成“添加以供审核”及“提交以供审核”。当前等待 Apple 审核；免费供应与 Mac / Vision Pro 兼容可用性设置保留。

@@ -4,7 +4,7 @@
 
 开发者：Zhu Hong · [官网](https://zhuhong.me/weiji/) · [支持](https://zhuhong.me/weiji/support.html) · [隐私政策](https://zhuhong.me/weiji/privacy.html)
 
-当前为 1.0.0 (4)，已上传 App Store Connect 并安装到真机，尚未提交审核。商店记录为 `6832293808`。验证与提交状态见 [Review 与验证记录](docs/REVIEW.md)。
+当前为 1.0.0 (4)，已安装到真机，并于 2026-11-09 提交 App Store 审核，状态为“等待审核”。商店记录为 `6832293808`。审核通过后自动免费发布。验证与提交状态见 [Review 与验证记录](docs/REVIEW.md)。
 
 ## 内容与体验
 

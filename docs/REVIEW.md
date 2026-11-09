@@ -45,10 +45,11 @@
 ## 2026-11-09 发布进度
 
 - Build 3 移除应用内品牌和口号，精简答题反馈及课程中的无关修饰句。Node 5 项、Swift 7 项和 iPhone 截图流程通过（`build/Store-build3-iPhone.xcresult`）。
-- 自动截图流程通过不代表图片可用：整屏 PNG 中练习 WebView 未被捕获，只有首页图通过目视检查。iPad 本轮测试在测试器建立连接前被系统终止，不计为通过（`build/Store-build3-iPad.xcresult`）。当前版商店截图仍需补齐。
+- 自动截图流程通过不代表图片可用：整屏 PNG 中练习 WebView 未被捕获，只有首页图通过目视检查。iPad 本轮测试在测试器建立连接前被系统终止，不计为通过（`build/Store-build3-iPad.xcresult`）。当前版商店截图随后改用直接取屏补齐，详见下项。
 - Build 4 按用户选择开启 Apple 芯片 Mac 和 Vision Pro 兼容运行。Release 签名归档 `build/Weiji-build4.xcarchive` 和上传均成功；iPhone Duo 安装查询确认版本为 1.0.0 (4)。Mac / Vision Pro 尚未进行设备验证。
 - App Store Connect 记录 `6832293808` 已创建。产品说明、支持 / 隐私 URL、版权信息、4+ 年龄分级和“不收集数据”标签已保存；免费定价、175 个地区供应和 Mac / Vision Pro 可用性已配置。
-- 用户已授权最终提交。仍需补齐本版截图、在版本页替换为处理后的 Build 4，并完成提交。尚未提交审核、尚未上架。
+- 2026-11-09 已核验并上传当前 iPhone / iPad 截图各两张、Duo 展开练习与首页 PNG 各一张，六张素材均已完成处理。Duo JPEG 处理缓慢，已替换其版本关联，原件保留。
+- 2026-11-09 13:06（GMT+7）正式提交 1.0.0 (4)。Apple 返回“已提交 1 个项目”，审核详情显示“等待审核”。提交 ID：`062b8d8b-d0b7-4d54-9055-9fe6cd5fd48a`。已选择审核通过后自动免费发布，保留 Mac / Vision Pro 兼容可用性；尚未上架。
 
 ## 发布前仍需区分的事项
 
